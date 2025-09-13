@@ -6,7 +6,6 @@ function App() {
   const [quizGenerated, setQuizGenerated] = useState(false);
 
   const handleFileUpload = (e) => {
-    // In real app, handle PDF upload + send to backend
     console.log(e.target.files[0]);
     setQuizGenerated(true);
   };
