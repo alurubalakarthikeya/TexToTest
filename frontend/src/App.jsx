@@ -19,7 +19,6 @@ function App() {
       </h1>
 
       <div className="container">
-        {/* Upload PDF */}
         <div className="card">
           <div className="upload-box">
             <input
@@ -38,7 +37,6 @@ function App() {
           <button className="btn">Generate Quiz</button>
         </div>
 
-        {/* Generated Quiz */}
         <div className="card">
           <h2>Generated Quiz</h2>
           {quizGenerated ? (
