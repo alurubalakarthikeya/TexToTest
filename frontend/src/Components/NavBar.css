@@ -1,5 +1,4 @@
-/* Navbar container */
-.navbar {
+  .navbar {
     width: 100%;
     padding: 15px 40px;
     display: flex;
@@ -8,9 +7,9 @@
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(158, 208, 255, 0.2);
     border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(111, 205, 255, 0.1);
     position: fixed;
     top: 20px;
     left: 50%;
@@ -19,14 +18,61 @@
     z-index: 1000;
   }
   
-  /* Logo */
+  .stopwatch-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    gap: 0;
+    background-color: rgba(75, 105, 224, 0.2);
+    backdrop-filter: blur(12px);
+    padding: 6px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    transition: all 0.4s;
+    overflow: hidden;
+  }
+  
+  .stopwatch-container.expanded {
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 60px;
+    width: 100px; 
+    justify-content: flex-start;
+  }
+  
+  .stopwatch-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+  }
+  
+  .stopwatch-circle:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  
+  .stopwatch-time {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    min-width: 45px;
+    text-align: center;
+  }
+  
+
   .logo {
     font-size: 1.5rem;
     font-weight: bold;
     color: white;
   }
   
-  /* Links */
   .nav-links {
     display: flex;
     gap: 25px;
@@ -45,7 +91,7 @@
     position: absolute;
     width: 0%;
     height: 2px;
-    background: linear-gradient(90deg, #7f5cff, #3dbbff);
+    background: linear-gradient(90deg, #ffffff, #38b9ff);
     left: 0;
     bottom: -5px;
     transition: width 0.3s ease;
@@ -59,7 +105,6 @@
     width: 100%;
   }
   
-  /* Hamburger Menu */
   .menu-toggle {
     display: none;
     flex-direction: column;
@@ -85,24 +130,13 @@
     transform: rotate(-45deg) translate(6px, -6px);
   }
   
-  /* Responsive */
   @media (max-width: 768px) {
     .navbar {
         width: 90%;
     }
     .nav-links {
       position: absolute;
-      top: 70px;
-      right: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(12px);
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      gap: 15px;
-      display: none;
+      right: 15px;
     }
   
     .nav-links.open {

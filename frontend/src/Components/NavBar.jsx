@@ -1,28 +1,52 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { Play, Pause } from "lucide-react";
 import "./NavBar.css";
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+const Navbar = () => {
+  const [time, setTime] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+
+  // Stopwatch logic
+  useEffect(() => {
+    let interval;
+    if (isRunning) {
+      interval = setInterval(() => {
+        setTime((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  const toggleStopwatch = () => {
+    setIsRunning((prev) => !prev);
+  };
+
+  const formatTime = (t) => {
+    const minutes = String(Math.floor(t / 60)).padStart(2, "0");
+    const seconds = String(t % 60).padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  };
 
   return (
     <nav className="navbar">
-      <div className="logo">Text2Test</div>
+      <div className="logo">TexToTest</div>
 
-      <div className={`nav-links ${isOpen ? "open" : ""}`}>
-        <a href="#home">Home</a>
-        <a href="#features">Features</a>
-        <a href="#upload">Upload</a>
-        <a href="#about">About</a>
-      </div>
-
-      <div
-        className={`menu-toggle ${isOpen ? "active" : ""}`}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span></span>
-        <span></span>
-        <span></span>
+      <div className="nav-links">
+        {/* Stopwatch */}
+        <div
+          className={`stopwatch-container ${isRunning ? "expanded" : ""}`}
+          onClick={toggleStopwatch}
+        >
+          <div className="stopwatch-circle">
+            {isRunning ? <Pause size={14} /> : <Play size={14} />}
+          </div>
+          {isRunning && (
+            <span className="stopwatch-time">{formatTime(time)}</span>
+          )}
+        </div>
       </div>
     </nav>
   );
-}
+};
+
+export default Navbar;

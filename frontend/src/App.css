@@ -5,16 +5,32 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #7f5cff, #3dbbff);
+  background: linear-gradient(135deg, #80c1ffbf, #3dbbff79, #34629a, #427f9084);
+  background-size: 400% 400%;
   font-family: "Bricolage Grotesque", sans-serif;
   color: white;
   padding: 20px;
+  animation: gradientAnimation 30s ease infinite;
 }
 
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
 .title {
-  font-size: 2.4rem;
+  font-size: 2.5rem;
+  font-weight: bold;
   text-align: center;
-  margin-bottom: 70px;
+  margin: 70px;
 }
 
 .container {
@@ -33,10 +49,10 @@
   padding: 30px;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(158, 208, 255, 0.2);
   color: white;
-  min-height: 300px;
-  box-shadow: 0 8px 32px rgba(146, 146, 146, 0.2);
+  min-height: 333px;
+  box-shadow: 0 4px 20px rgba(111, 205, 255, 0.1);
 }
 
 .upload-label {
@@ -74,7 +90,7 @@
   margin-top: 40px;
   width: 100%;
   padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(158, 208, 255, 0.2);
   border-radius: 12px;
   background: rgba(121, 94, 157, 0.136);
   backdrop-filter: blur(10px);
