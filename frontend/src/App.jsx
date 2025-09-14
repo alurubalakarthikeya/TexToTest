@@ -7,7 +7,11 @@ export default function App() {
   const [isFullyExpanded, setIsFullyExpanded] = useState(false);
   const [placeholderStyle, setPlaceholderStyle] = useState(null);
   const [inlineStyle, setInlineStyle] = useState(null);
+
   const [questions, setQuestions] = useState([]);
+  const [response, setResponse] = useState(""); // model output state
+  const [uploadedFiles, setUploadedFiles] = useState([]); // ✅ store multiple uploaded files
+
   const quizRef = useRef(null);
   const startRectRef = useRef(null);
   const DURATION = 1000; // ms
@@ -52,10 +56,10 @@ export default function App() {
     setInlineStyle(startStyle);
     setIsExpanded(true);
 
-   document.querySelector(".title").classList.add("blur-out");
-   document.querySelectorAll(".card").forEach((c) => {
-     if (!c.classList.contains("quiz-card")) c.classList.add("blur-out");
-   });
+    document.querySelector(".title").classList.add("blur-out");
+    document.querySelectorAll(".card").forEach((c) => {
+      if (!c.classList.contains("quiz-card")) c.classList.add("blur-out");
+    });
 
     requestAnimationFrame(() => {
       setInlineStyle({
@@ -108,16 +112,42 @@ export default function App() {
     }, DURATION + 100);
   };
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // 🔹 Generate Quiz (expands only when clicked)
+  const handleGenerateClick = async () => {
     expandCard();
 
+    try {
+      const res = await fetch("http://127.0.0.1:8000/ask-model/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: "What is Earth" }), // test prompt
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch model response");
+
+      const data = await res.json();
+      setResponse(data.response || "No response from model");
+    } catch (err) {
+      console.error("Error fetching response:", err);
+      setResponse("Error: could not fetch response");
+    }
+  };
+
+  // 🔹 Upload files (just collect them, don't expand yet)
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploadedFiles((prev) => [...prev, ...files.map((f) => f.name)]);
+
+    // Send last uploaded file to backend (you can extend for multiple)
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", files[files.length - 1]);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/upload-pdf/", {
+      const res = await fetch("http://127.0.0.1:8000/upload/", {
         method: "POST",
         body: formData,
       });
@@ -128,10 +158,6 @@ export default function App() {
     } catch (err) {
       console.error("Error fetching quiz:", err);
     }
-  };
-
-  const handleGenerateClick = () => {
-    expandCard();
   };
 
   return (
@@ -151,12 +177,13 @@ export default function App() {
               id="pdfUpload"
               accept="application/pdf"
               onChange={handleFileUpload}
+              multiple // ✅ allow multiple
               style={{ display: "none" }}
             />
             <label htmlFor="pdfUpload" className="upload-label">
               <i className="fas fa-file-pdf" aria-hidden />
               <p>Upload PDF</p>
-              <span>Drag and drop file here or click to select</span>
+              <span>Drag and drop files here or click to select</span>
             </label>
           </div>
 
@@ -186,37 +213,46 @@ export default function App() {
 
           <h2>Generated Quiz</h2>
 
-          {!isExpanded ? (
-            <p className="quiz-instruction">
-              Upload a PDF and click "Generate Quiz" to see the questions here.
-            </p>
-          ) : (
-            <div className="question-grid" style={{ marginTop: "16px" }}>
-              {questions.length > 0 ? (
-                questions.map((item, idx) => (
-                  <article className="question-card" key={idx}>
-                    <p className="question-text">
-                      Q{idx + 1}. {item.q}
-                    </p>
-                    <ul className="options">
-                      {item.options.map((opt, i) => (
-                        <li key={i} className="option">
-                          <span className="opt-letter">
-                            {String.fromCharCode(65 + i)}.
-                          </span>
-                          <span className="opt-text">{opt}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </article>
-                ))
-              ) : (
-                <p className="quiz-instruction">
-                  Processing PDF... Please wait.
-                </p>
-              )}
+          {/* Show model response */}
+          {response && (
+            <div className="output-box">
+              <h3>Model Response:</h3>
+              <p>{response}</p>
             </div>
           )}
+
+          {/* Show questions */}
+          <div className="question-grid" style={{ marginTop: "16px" }}>
+            {questions.length > 0 ? (
+              questions.map((item, idx) => (
+                <article className="question-card" key={idx}>
+                  {typeof item === "string" ? (
+                    <p className="question-text">{item}</p>
+                  ) : (
+                    <>
+                      <p className="question-text">
+                        Q{idx + 1}. {item.q}
+                      </p>
+                      <ul className="options">
+                        {item.options?.map((opt, i) => (
+                          <li key={i} className="option">
+                            <span className="opt-letter">
+                              {String.fromCharCode(65 + i)}.
+                            </span>
+                            <span className="opt-text">{opt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </article>
+              ))
+            ) : (
+              <p className="quiz-instruction">
+                Upload a PDF and click "Generate Quiz" to see the questions here.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

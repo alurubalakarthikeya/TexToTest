@@ -1,28 +1,33 @@
 from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from model import generate_text
 
 app = FastAPI()
 
-# Allow frontend (React) to call backend
+from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # set to your frontend domain in production
+    allow_origins=["*"],  # or ["http://localhost:3000"] for stricter security
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],   # Allow POST, GET, OPTIONS etc.
+    allow_headers=["*"],   # Allow headers like Content-Type, Authorization
 )
 
-@app.post("/upload-pdf/")
-async def upload_pdf(file: UploadFile = File(...)):
-    # For now, mock response (later process PDF with NLP)
-    questions = [
-        {
-            "q": "What is the capital of France?",
-            "options": ["Berlin", "Madrid", "London", "Paris"],
-        },
-        {
-            "q": "Which language is primarily used for styling web pages?",
-            "options": ["Python", "HTML", "CSS", "C++"],
-        },
-    ]
-    return {"questions": questions}
+
+class PromptRequest(BaseModel):
+    prompt: str
+
+@app.get("/")
+def root():
+    return {"message": "Backend is running!"}
+
+@app.post("/ask-model/")
+def ask_model(request: PromptRequest):
+    output = generate_text(request.prompt)
+    return {"response": output}
+
+# ✅ File upload test endpoint
+@app.post("/upload/")
+async def upload_file(file: UploadFile = File(...)):
+    return {"questions": [f"Received file: {file.filename}"]}

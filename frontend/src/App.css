@@ -17,6 +17,36 @@
   padding: 20px;
   animation: gradientAnimation 30s ease infinite;
 }
+
+/* ...existing code... */
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(52, 98, 154, 0.2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #80c2ff75, #3dbbff71);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #3dbbff7f, #34629a);
+  box-shadow: 0 0 5px rgba(61, 187, 255, 0.5);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #80c2ff6b rgba(52, 98, 154, 0.2);
+}
+
 @keyframes gradientAnimation {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -104,7 +134,8 @@
 .quiz-card {
   transition: box-shadow 240ms ease, transform 240ms ease;
   overflow: hidden;
-  max-height: 650px;
+  max-height: 330px;
+  overflow: auto;
   width: 100%;
   margin: 0 auto;
   position: relative;
