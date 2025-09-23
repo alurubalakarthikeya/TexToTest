@@ -24,7 +24,7 @@
 
 ## Tech Stack
 
-- **Frontend:** React.js, CSS (responsive UI, drag-and-drop PDF upload)  
+- **Frontend:** React.js, CSS, PWA
 - **Backend:** Python with FastAPI  
 - **AI & NLP:**  
   - HuggingFace Transformers  
@@ -34,7 +34,6 @@
   - Sentence-Transformers (lightweight semantic similarity)  
   - PDFPlumber (PDF extraction)  
 - **Vector Search:** FAISS for semantic similarity & distractor validation  
-- **Question Generation Model:** Fine-tuned pythia-410m  
 - **Hosting:** Render (backend), Vercel (frontend)
 
 
@@ -82,4 +81,3 @@ cd ../frontend
 npm install
 npm run dev
 ```
-
