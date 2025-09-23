@@ -1,39 +1,69 @@
-<h2 align="center">TexToTest</h2>
+# TexToTest
 
-**TexToTest** is an AI-powered assistant that automatically generates quiz questions from **e-learning PDFs** using NLP pipelines.  
+**TexToTest** is an AI-powered assistant that automatically generates quiz questions from e-learning PDFs using **NLP pipelines**. It combines **Heuristic + Pattern-based approaches** with lightweight NLP and optional semantic validation to create high-quality, domain-relevant quizzes efficiently.
 
-It helps educators, students, and institutions by:  
+## Features
 
-- Extracting and preprocessing content from PDFs  
-- Generating multiple types of quiz questions (MCQs, Fill-in-the-Blanks, True/False, Short Answer)  
-- Selecting key educational concepts intelligently  
-- Producing high-quality answers and distractors  
-- Enabling adaptive and scalable self-assessment for learners  
+- **Extract & preprocess content from PDFs**  
+  Efficiently extracts text, headings, tables, and key phrases from uploaded PDFs.  
+
+- **Multiple question types**  
+  Generates MCQs, Fill-in-the-Blanks, True/False, and Short Answer questions.  
+
+- **Intelligent content selection**  
+  Uses heuristics and pattern-based rules to identify key educational concepts.  
+
+- **Answer & distractor generation**  
+  Produces high-quality answers and distractors; includes optional lightweight semantic validation for better distractor relevance.  
+
+- **Adaptive self-assessment**  
+  Enables scalable quizzes for students, educators, and institutions.  
+
+- **Lightweight & efficient**  
+  Works without heavy NLP models for most tasks, making it suitable for local or cloud deployment.
 
 ## Tech Stack
 
-- **Frontend**: React.js, CSS  
-- **Backend**: Python with FastAPI 
-- **AI & NLP**: HuggingFace Transformers, PEFT, SpaCy, NLTK, Sentence-Transformers, PDFPlumber 
-- **Vector Search**: FAISS for semantic similarity 
-- **Question Generation Model**: Fine-tuned pythia-410m
-- **Hosting**: Render, Vercel 
+- **Frontend:** React.js, CSS (responsive UI, drag-and-drop PDF upload)  
+- **Backend:** Python with FastAPI  
+- **AI & NLP:**  
+  - HuggingFace Transformers  
+  - PEFT (Parameter-Efficient Fine-Tuning)  
+  - SpaCy (NER, POS tagging, dependency parsing)  
+  - NLTK (tokenization, pattern-based rules)  
+  - Sentence-Transformers (lightweight semantic similarity)  
+  - PDFPlumber (PDF extraction)  
+- **Vector Search:** FAISS for semantic similarity & distractor validation  
+- **Question Generation Model:** Fine-tuned pythia-410m  
+- **Hosting:** Render (backend), Vercel (frontend)
+
 
 ## How It Works
 
-1. **User uploads an e-learning PDF**  
-2. **Text extraction & preprocessing** (using PDFPlumber)  
-3. **Content selection** via summarization, embeddings, and key concept extraction  
-4. **Question generation** using rule-based + neural NLP pipelines  
-5. **Answer & distractor generation** (for MCQs and cloze questions)  
-6. **Result returned** to the user in a clean, responsive UI  
+1. **Upload PDF**  
+   Users upload an e-learning PDF via the frontend.  
+
+2. **Text Extraction & Preprocessing**  
+   - PDFPlumber extracts text, tables, and bullet points.  
+   - Text is cleaned and chunked for efficient processing.  
+
+3. **Content Selection**  
+   - **Heuristic Layer:** Identifies key concepts using NER, POS tagging, frequency analysis, and PDF formatting cues.  
+   - **Pattern-based Layer:** Converts key concepts into candidate questions using predefined templates.  
+
+4. **Question & Distractor Generation**  
+   - Rule-based pipelines generate question stems.  
+   - Distractors are created using spelling/format patterns and optional lightweight semantic similarity checks.  
+
+5. **Result Delivery**  
+   - The system returns the generated questions in a clean, responsive UI.  
+   - Users can view, download, or export quizzes.
 
 ## Setup Instructions
 
 ### 1. Clone the Repository
-
 ```bash
-git clone https://github.com/<your-username>/TexToTest.git
+git clone https://github.com/alurubalakarthikeya/TexToTest.git
 cd TexToTest
 ```
 
