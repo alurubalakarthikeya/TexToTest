@@ -11,6 +11,7 @@ export default function App() {
   const [questions, setQuestions] = useState([]);
   const [response, setResponse] = useState(""); // model output state
   const [uploadedFiles, setUploadedFiles] = useState([]); // ✅ store multiple uploaded files
+  const [isLoading, setIsLoading] = useState(false);
 
   const quizRef = useRef(null);
   const startRectRef = useRef(null);
@@ -112,26 +113,33 @@ export default function App() {
     }, DURATION + 100);
   };
 
-  // 🔹 Generate Quiz (expands only when clicked)
   const handleGenerateClick = async () => {
     expandCard();
+    setIsLoading(true);
+    setResponse("Generating multiple-choice questions...");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/ask-model/", {
+      const res = await fetch("http://127.0.0.1:8000/ask-model", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: "What is Earth" }), // test prompt
+        body: JSON.stringify({ 
+          num_questions: 25, 
+          question_type: "multiple_choice" 
+        }),
       });
 
-      if (!res.ok) throw new Error("Failed to fetch model response");
+      if (!res.ok) throw new Error("Failed to fetch questions");
 
       const data = await res.json();
-      setResponse(data.response || "No response from model");
+      setQuestions(data.questions || []);
+      setResponse(`Generated ${data.questions?.length || 0} multiple-choice questions successfully!`);
     } catch (err) {
-      console.error("Error fetching response:", err);
-      setResponse("Error: could not fetch response");
+      console.error("Error fetching questions:", err);
+      setResponse("Error: could not fetch questions. Make sure you've uploaded a file first.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -147,16 +155,19 @@ export default function App() {
     formData.append("file", files[files.length - 1]);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/upload/", {
+      const res = await fetch("http://127.0.0.1:8000/upload", {
         method: "POST",
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Failed to fetch quiz");
+      if (!res.ok) throw new Error("Failed to upload file");
       const data = await res.json();
-      setQuestions(data.questions || []);
+      setResponse(`File uploaded: ${data.filename}. Click "Generate Quiz" to create questions.`);
+      // Clear previous questions when new file is uploaded
+      setQuestions([]);
     } catch (err) {
-      console.error("Error fetching quiz:", err);
+      console.error("Error uploading file:", err);
+      setResponse("Error: could not upload file");
     }
   };
 
@@ -174,16 +185,16 @@ export default function App() {
           <div className="upload-box">
             <input
               type="file"
-              id="pdfUpload"
-              accept="application/pdf"
+              id="fileUpload"
+              accept="application/pdf,.txt,.md"
               onChange={handleFileUpload}
-              multiple // ✅ allow multiple
+              multiple 
               style={{ display: "none" }}
             />
-            <label htmlFor="pdfUpload" className="upload-label">
-              <i className="fas fa-file-pdf" aria-hidden />
-              <p>Upload PDF</p>
-              <span>Drag and drop files here or click to select</span>
+            <label htmlFor="fileUpload" className="upload-label">
+              <i className="fas fa-file-upload" aria-hidden />
+              <p>Upload Documents</p>
+              <span>PDF, TXT, MD files supported</span>
             </label>
           </div>
 
@@ -218,41 +229,103 @@ export default function App() {
             <div className="output-box">
               <h3>Model Response:</h3>
               <p>{response}</p>
+              {uploadedFiles.length > 0 && (
+              <div className="uploaded-files">
+                <h4>Uploaded Files:</h4>
+                <ul>
+                  {uploadedFiles.map((fileName, idx) => (
+                    <li key={idx} className="file-item">
+                      <i className="fas fa-check-circle"></i>
+                      {fileName}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+              <br />
             </div>
           )}
 
-          {/* Show questions */}
-          <div className="question-grid" style={{ marginTop: "16px" }}>
-            {questions.length > 0 ? (
-              questions.map((item, idx) => (
-                <article className="question-card" key={idx}>
-                  {typeof item === "string" ? (
-                    <p className="question-text">{item}</p>
-                  ) : (
-                    <>
-                      <p className="question-text">
-                        Q{idx + 1}. {item.q}
-                      </p>
-                      <ul className="options">
-                        {item.options?.map((opt, i) => (
-                          <li key={i} className="option">
-                            <span className="opt-letter">
-                              {String.fromCharCode(65 + i)}.
-                            </span>
-                            <span className="opt-text">{opt}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
-                </article>
-              ))
-            ) : (
+          {isFullyExpanded && (
+            <div className="mcq-container">
+              {isLoading ? (
+                <div className="loading-container">
+                  <div className="loading-spinner"></div>
+                  <h3>Generating Questions...</h3>
+                  <p>Using OpenRouter Mistral AI to create multiple-choice questions with distractors</p>
+                </div>
+              ) : questions.length > 0 ? (
+                questions.map((mcq, idx) => (
+                  <div className="mcq-card" key={idx} style={{animationDelay: `${idx * 0.1}s`}}>
+                    <div className="question-header">
+                      <span className="question-number">Q{idx + 1}</span>
+                      <h3 className="question-text">{mcq.question}</h3>
+                    </div>
+                    
+                    <div className="options-container">
+                      {Object.entries(mcq.options || {}).map(([letter, text]) => (
+                        <label className="option-label" key={letter}>
+                          <input 
+                            type="radio" 
+                            name={`question-${idx}`} 
+                            value={letter}
+                            className="option-input"
+                          />
+                          <div className="option-content">
+                            <span className="option-letter">{letter}.</span>
+                            <span className="option-text">{text}</span>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                    
+                    <div className="question-footer">
+                      <button
+                       className="reveal-answer-btn"
+                       onClick={(e) => {
+                         const btn = e.currentTarget;
+                         const footer = btn.closest('.question-footer');
+                         if (!footer) return;
+                         const explanation = footer.querySelector('.explanation');
+                         if (!explanation) return;
+                         if (explanation.style.display === 'none' || !explanation.style.display) {
+                           explanation.style.display = 'block';
+                           btn.textContent = 'Hide Answer';
+                         } else {
+                           explanation.style.display = 'none';
+                           btn.textContent = 'Show Answer';
+                         }
+                       }}
+                     >
+                       Show Answer
+                     </button>
+                     
+                      <div className="explanation" style={{display: 'none'}}>
+                        <strong>Correct Answer: {mcq.correct_answer}</strong>
+                        <p>{mcq.explanation}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="empty-state">
+                  <h3>No Questions Generated Yet</h3>
+                  <p>Upload a PDF file and click "Generate Quiz" to see multiple-choice questions here.</p>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {!isFullyExpanded && (
+            <div className="quiz-preview">
               <p className="quiz-instruction">
-                Upload a PDF and click "Generate Quiz" to see the questions here.
+                {questions.length > 0 
+                  ? `${questions.length} questions ready! Click to expand and view.`
+                  : "Upload a PDF and click 'Generate Quiz' to see questions here."
+                }
               </p>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

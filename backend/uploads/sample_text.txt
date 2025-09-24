@@ -1,0 +1,14 @@
+
+    Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, 
+    one of the two pillars of modern physics. His work is also known for its influence on the 
+    philosophy of science. He was born in Ulm, in the Kingdom of Württemberg in the German Empire, 
+    on 14 March 1879. Einstein received the 1921 Nobel Prize in Physics for his services to 
+    theoretical physics, and especially for his discovery of the law of the photoelectric effect, 
+    a pivotal step in the development of quantum theory.
+    
+    Isaac Newton was an English mathematician, physicist, astronomer, theologian, and author who 
+    is widely recognised as one of the greatest mathematicians and physicists of all time. 
+    He was born on 4 January 1643 in Woolsthorpe-by-Colsterworth, Lincolnshire, England. 
+    Newton formulated the laws of motion and universal gravitation that formed the dominant 
+    scientific viewpoint until it was superseded by the theory of relativity.
+    

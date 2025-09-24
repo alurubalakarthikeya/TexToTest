@@ -12,8 +12,8 @@ export default defineConfig({
         name: 'TexToTest',
         short_name: 'TexToTest',
         description: 'A quiz app that generates quizzes from text using AI.',
-        theme_color: '#3e6e95',
-        background_color: '#3e6e95',
+        theme_color: '#125084ff',
+        background_color: '#125084ff',
         display: 'standalone',
         start_url: '/',
         icons: [
