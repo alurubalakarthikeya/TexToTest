@@ -119,7 +119,7 @@ export default function App() {
     setResponse("Generating multiple-choice questions...");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/ask-model", {
+      const res = await fetch(" https://textotest.onrender.com/ask-model", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -155,7 +155,7 @@ export default function App() {
     formData.append("file", files[files.length - 1]);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/upload", {
+      const res = await fetch(" https://textotest.onrender.com/upload", {
         method: "POST",
         body: formData,
       });
