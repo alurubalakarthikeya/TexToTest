@@ -2,6 +2,13 @@ import React, { useState, useRef } from "react";
 import "./App.css";
 import Navbar from "./Components/NavBar.jsx";
 
+// API base dynamic: Vite env or window override or fallback to local
+const API_BASE = (
+  import.meta?.env?.VITE_API_BASE ||
+  (typeof window !== 'undefined' && window.__API_BASE__) ||
+  "https://textotest.onrender.com"
+).replace(/\/$/, "");
+
 export default function App() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isFullyExpanded, setIsFullyExpanded] = useState(false);
@@ -12,6 +19,7 @@ export default function App() {
   const [response, setResponse] = useState(""); // model output state
   const [uploadedFiles, setUploadedFiles] = useState([]); // ✅ store multiple uploaded files
   const [isLoading, setIsLoading] = useState(false);
+  const [canGenerate, setCanGenerate] = useState(false); // becomes true after successful upload
 
   const quizRef = useRef(null);
   const startRectRef = useRef(null);
@@ -119,25 +127,33 @@ export default function App() {
     setResponse("Generating multiple-choice questions...");
 
     try {
-      const res = await fetch(" https://textotest.onrender.com/ask-model", {
+      const res = await fetch(`${API_BASE}/ask-model`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          num_questions: 25, 
-          question_type: "multiple_choice" 
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ num_questions: 25, question_type: "multiple_choice" }),
       });
 
-      if (!res.ok) throw new Error("Failed to fetch questions");
+      if (!res.ok) {
+        let serverMsg = "";
+        try {
+          const data = await res.json();
+          serverMsg = typeof data === 'string' ? data : (data.detail || JSON.stringify(data));
+        } catch (_) {
+          serverMsg = await res.text();
+        }
+        throw new Error(serverMsg || `Request failed with ${res.status}`);
+      }
 
       const data = await res.json();
       setQuestions(data.questions || []);
       setResponse(`Generated ${data.questions?.length || 0} multiple-choice questions successfully!`);
     } catch (err) {
       console.error("Error fetching questions:", err);
-      setResponse("Error: could not fetch questions. Make sure you've uploaded a file first.");
+      const msg = String(err?.message || err);
+      // Show backend detail when available
+      setResponse(msg.includes("No context")
+        ? "No context on server. Please upload a file again and retry."
+        : `Error while generating: ${msg}`);
     } finally {
       setIsLoading(false);
     }
@@ -150,24 +166,29 @@ export default function App() {
 
     setUploadedFiles((prev) => [...prev, ...files.map((f) => f.name)]);
 
-    // Send last uploaded file to backend (you can extend for multiple)
     const formData = new FormData();
     formData.append("file", files[files.length - 1]);
 
     try {
-      const res = await fetch(" https://textotest.onrender.com/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error("Failed to upload file");
+      const res = await fetch(`${API_BASE}/upload`, { method: "POST", body: formData });
+      if (!res.ok) {
+        let serverMsg = "";
+        try {
+          const data = await res.json();
+          serverMsg = typeof data === 'string' ? data : (data.detail || JSON.stringify(data));
+        } catch (_) {
+          serverMsg = await res.text();
+        }
+        throw new Error(serverMsg || `Upload failed with ${res.status}`);
+      }
       const data = await res.json();
       setResponse(`File uploaded: ${data.filename}. Click "Generate Quiz" to create questions.`);
-      // Clear previous questions when new file is uploaded
       setQuestions([]);
+      setCanGenerate(true);
     } catch (err) {
       console.error("Error uploading file:", err);
-      setResponse("Error: could not upload file");
+      setResponse(`Upload error: ${err?.message || err}`);
+      setCanGenerate(false);
     }
   };
 
@@ -198,8 +219,8 @@ export default function App() {
             </label>
           </div>
 
-          <button className="btn" onClick={handleGenerateClick}>
-            Generate Quiz
+          <button className="btn" onClick={handleGenerateClick} disabled={!canGenerate || isLoading}>
+            {isLoading ? "Generating..." : (!canGenerate ? "Upload a file first" : "Generate Quiz")}
           </button>
         </div>
 
