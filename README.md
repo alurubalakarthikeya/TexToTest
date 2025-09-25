@@ -74,6 +74,33 @@ pip install -r requirements.txt
 uvicorn app:app --reload
 ```
 
+#### Backend configuration
+
+Create a `.env` file in `backend/` with:
+
+```bash
+OPENROUTER_API_KEY=sk-or-v1_your_openrouter_key
+# Comma-separated list of allowed frontend origins (scheme+host+port)
+ALLOWED_ORIGINS=https://your-frontend.example.com,http://localhost:5173
+# Optional attribution headers for OpenRouter (recommended but not required)
+OPENROUTER_SITE_URL=https://your-frontend.example.com
+APP_TITLE=TexToTest
+```
+
+Quick diagnostics:
+
+- Check service health: `GET /health`
+- Check readiness (context present): `GET /ready`
+- Check configuration status: `GET /status`
+
+Example with curl (adjust host/port as needed):
+
+```bash
+curl -s http://localhost:8000/status | jq
+```
+
+If `openrouter.configured` is false or you get a 401 from `/ask-model`, verify the `OPENROUTER_API_KEY` value in your environment or hosting provider. Keys typically start with `sk-or-v1_…`.
+
 ### 3. Frontend Setup
 
 ```bash
@@ -81,3 +108,15 @@ cd ../frontend
 npm install
 npm run dev
 ```
+
+#### Frontend API base
+
+- Set `VITE_API_BASE` in `frontend/.env` to point to your backend (prod or local):
+
+```bash
+VITE_API_BASE=https://textotest.onrender.com
+# or
+# VITE_API_BASE=http://localhost:8000
+```
+
+The frontend also falls back to `window.API_BASE` and a sane default if not provided.

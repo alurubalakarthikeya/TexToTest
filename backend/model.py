@@ -17,6 +17,17 @@ APP_TITLE = os.getenv("APP_TITLE", "TexToTest")
 # Initialize distractor generator
 distractor_gen = DistractorGenerator()
 
+def get_openrouter_status() -> dict:
+    """Return non-sensitive diagnostics for OpenRouter config."""
+    key = os.getenv("OPENROUTER_API_KEY")
+    return {
+        "configured": bool(key and key.strip()),
+        "key_prefix": (key[:7] + "…") if key else None,
+        "model": MISTRAL_MODEL,
+        "site_header_set": bool(OPENROUTER_SITE),
+        "app_title": APP_TITLE,
+    }
+
 def generate_questions(context, num_questions=25, question_type="multiple_choice"):
     """Generate questions with multiple choice options using distractor generation"""
     

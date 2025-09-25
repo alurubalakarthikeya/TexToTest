@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from model import generate_questions
+from model import generate_questions, get_openrouter_status
 from utils import extract_text_from_file
 from vectordb import store_text, get_context, clear_context
 import shutil
@@ -132,3 +132,14 @@ async def readiness_check():
     """Ready when context exists; useful for platform readiness probes."""
     ctx = get_context()
     return {"ready": bool(ctx), "context_length": len(ctx) if ctx else 0}
+
+@app.get("/status")
+async def status():
+    """Operational status including OpenRouter config (non-sensitive) and context info."""
+    ctx = get_context()
+    return {
+        "service": "TexToTest Backend",
+        "context_ready": bool(ctx),
+        "context_length": len(ctx) if ctx else 0,
+        "openrouter": get_openrouter_status(),
+    }
