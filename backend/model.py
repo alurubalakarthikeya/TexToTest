@@ -108,11 +108,14 @@ def generate_question_answer_pairs(context, num_questions=25):
     """Generate question-answer pairs from context using OpenRouter"""
     if not OPENROUTER_API_KEY:
         raise Exception("Missing OPENROUTER_API_KEY. Set it in your deployment environment.")
-    prompt = f"""Based on the following context, generate {num_questions} question-answer pairs. 
-    Format each pair as: Q: [question] A: [short, specific answer]
-    
+    prompt = f"""Based on the following context, generate {num_questions} question-answer pairs.
+    Format strictly: Q: [concise question]
+    A: [one word or at most a very short phrase (<= 2 words)]
+
+    Keep answers noun-like and compact (e.g., 'Gradient', 'Overfitting', 'Neuron'). Avoid full sentences.
+
     Context: {context}
-    
+
     Question-Answer pairs:"""
     
     headers = {
