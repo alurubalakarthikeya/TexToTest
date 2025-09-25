@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from fastapi import FastAPI, UploadFile, File, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from model import generate_questions
@@ -10,12 +10,20 @@ from typing import Optional
 
 app = FastAPI(title="TexToTest API", description="Generate multiple-choice questions from uploaded documents")
 
+# CORS configuration: allow specific origins via env, default safe wildcard without credentials
+_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
+ALLOWED_ORIGINS = [o.strip() for o in _origins_env.split(",") if o.strip()]
+ALLOW_CREDENTIALS = os.getenv("CORS_ALLOW_CREDENTIALS", "false").lower() == "true"
+# If wildcard origins, force credentials off to comply with CORS spec
+if any(o == "*" for o in ALLOWED_ORIGINS) and ALLOW_CREDENTIALS:
+    ALLOW_CREDENTIALS = False
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=ALLOW_CREDENTIALS,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
 
 UPLOAD_DIR = "uploads"
@@ -36,6 +44,10 @@ def root():
             "Hybrid heuristic and pattern-based distractor generation"
         ]
     }
+
+@app.head("/")
+def root_head():
+    return Response(status_code=200)
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -110,3 +122,13 @@ async def clear_stored_context():
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "service": "TexToTest Backend"}
+
+@app.head("/health")
+async def health_head():
+    return Response(status_code=200)
+
+@app.get("/ready")
+async def readiness_check():
+    """Ready when context exists; useful for platform readiness probes."""
+    ctx = get_context()
+    return {"ready": bool(ctx), "context_length": len(ctx) if ctx else 0}
