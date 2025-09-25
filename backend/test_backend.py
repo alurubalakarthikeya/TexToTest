@@ -6,8 +6,9 @@ Test script for the TexToTest backend with distractor generation
 import requests
 import json
 import os
+import sys
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = os.environ.get("BASE_URL") or (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000")
 
 def test_health():
     """Test the health endpoint"""
@@ -67,26 +68,28 @@ def main():
     """Run all tests"""
     print("Testing TexToTest Backend with Distractor Generation")
     print("=" * 60)
+    print(f"BASE_URL = {BASE_URL}")
     
     # Test health
     if not test_health():
         print("❌ Health check failed")
-        return
+    sys.exit(1)
     print("✅ Health check passed")
     
     # Test upload
     if not test_upload_sample_text():
         print("❌ Upload test failed")
-        return
+    sys.exit(1)
     print("✅ Upload test passed")
     
     # Test question generation
     if not test_generate_questions():
         print("❌ Question generation test failed")
-        return
+        sys.exit(1)
     print("✅ Question generation test passed")
     
     print("\n🎉 All tests passed! The backend is working correctly.")
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()

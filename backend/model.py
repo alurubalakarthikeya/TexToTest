@@ -8,9 +8,11 @@ from distractor_generator import DistractorGenerator, create_multiple_choice_que
 
 load_dotenv()
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "your_openrouter_api_key")
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 MISTRAL_MODEL = "mistralai/mistral-7b-instruct"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_SITE = os.getenv("OPENROUTER_SITE_URL") or os.getenv("SITE_URL")
+APP_TITLE = os.getenv("APP_TITLE", "TexToTest")
 
 # Initialize distractor generator
 distractor_gen = DistractorGenerator()
@@ -25,11 +27,21 @@ def generate_questions(context, num_questions=25, question_type="multiple_choice
 
 def generate_simple_questions(context, num_questions=25):
     """Generate simple text questions without multiple choice options"""
-    prompt = f"Generate {num_questions} diverse, high-quality questions based on the following context.\nContext: {context}\nQuestions:"
+    if not OPENROUTER_API_KEY:
+        raise Exception("Missing OPENROUTER_API_KEY. Set it in your deployment environment.")
+
+    prompt = (
+        f"Generate {num_questions} diverse, high-quality questions based on the following context.\n"
+        f"Return each question on a new line without numbering.\n"
+        f"Context: {context}\nQuestions:"
+    )
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
     }
+    if OPENROUTER_SITE:
+        headers["HTTP-Referer"] = OPENROUTER_SITE
+    headers["X-Title"] = APP_TITLE
     data = {
         "model": MISTRAL_MODEL,
         "messages": [
@@ -38,14 +50,17 @@ def generate_simple_questions(context, num_questions=25):
         "max_tokens": 1024,
         "temperature": 0.7
     }
-    response = requests.post(OPENROUTER_URL, headers=headers, json=data)
+    response = requests.post(OPENROUTER_URL, headers=headers, json=data, timeout=60)
     if response.status_code == 200:
         result = response.json()
-        content = result["choices"][0]["message"]["content"]
+        try:
+            content = result["choices"][0]["message"]["content"]
+        except Exception:
+            raise Exception(f"Unexpected OpenRouter response format: {result}")
         questions = [q.strip() for q in content.split("\n") if q.strip()]
         return questions[:num_questions]
     else:
-        raise Exception(f"OpenRouter API error: {response.text}")
+        raise Exception(f"OpenRouter API error {response.status_code}: {response.text}")
 
 def generate_multiple_choice_questions(context, num_questions=25):
     """Generate multiple choice questions with distractors"""
@@ -80,6 +95,8 @@ def generate_multiple_choice_questions(context, num_questions=25):
 
 def generate_question_answer_pairs(context, num_questions=25):
     """Generate question-answer pairs from context using OpenRouter"""
+    if not OPENROUTER_API_KEY:
+        raise Exception("Missing OPENROUTER_API_KEY. Set it in your deployment environment.")
     prompt = f"""Based on the following context, generate {num_questions} question-answer pairs. 
     Format each pair as: Q: [question] A: [short, specific answer]
     
@@ -89,8 +106,11 @@ def generate_question_answer_pairs(context, num_questions=25):
     
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
     }
+    if OPENROUTER_SITE:
+        headers["HTTP-Referer"] = OPENROUTER_SITE
+    headers["X-Title"] = APP_TITLE
     data = {
         "model": MISTRAL_MODEL,
         "messages": [
@@ -100,13 +120,16 @@ def generate_question_answer_pairs(context, num_questions=25):
         "temperature": 0.7
     }
     
-    response = requests.post(OPENROUTER_URL, headers=headers, json=data)
+    response = requests.post(OPENROUTER_URL, headers=headers, json=data, timeout=90)
     if response.status_code == 200:
         result = response.json()
-        content = result["choices"][0]["message"]["content"]
+        try:
+            content = result["choices"][0]["message"]["content"]
+        except Exception:
+            raise Exception(f"Unexpected OpenRouter response format: {result}")
         return parse_question_answer_pairs(content)
     else:
-        raise Exception(f"OpenRouter API error: {response.text}")
+        raise Exception(f"OpenRouter API error {response.status_code}: {response.text}")
 
 def parse_question_answer_pairs(content: str) -> List[Dict[str, str]]:
     """Parse question-answer pairs from model output"""
