@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TexToTest - Enhanced Quiz Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        
+        .upload-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .config-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .config-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        
+        select, input, button {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .response-section {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .error {
+            background: #ffe6e6;
+            border-left-color: #dc3545;
+        }
+        
+        .questions-container {
+            margin-top: 20px;
+        }
+        
+        .question-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .question-number {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .question-meta {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .question-type {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .difficulty {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .difficulty.easy { background: #d4edda; color: #155724; }
+        .difficulty.medium { background: #fff3cd; color: #856404; }
+        .difficulty.hard { background: #f8d7da; color: #721c24; }
+        
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .option-item:hover {
+            border-color: #667eea;
+            background: #e8f0fe;
+        }
+        
+        .answer-section {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f8ff;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+            display: none;
+        }
+        
+        .show-answer-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .export-section {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 TexToTest Enhanced Quiz Generator</h1>
+        
+        <div class="upload-section">
+            <h3>📁 Upload Document</h3>
+            <input type="file" id="fileInput" accept=".pdf,.txt,.md" style="margin-bottom: 10px;">
+            <div id="uploadStatus"></div>
+        </div>
+        
+        <div class="config-section">
+            <div class="config-item">
+                <label for="questionType">Question Type:</label>
+                <select id="questionType">
+                    <option value="multiple_choice">Multiple Choice</option>
+                    <option value="true_false">True/False</option>
+                    <option value="fill_in_blank">Fill in the Blank</option>
+                    <option value="short_answer">Short Answer</option>
+                    <option value="matching">Matching</option>
+                    <option value="mixed">Mixed Types</option>
+                </select>
+            </div>
+            
+            <div class="config-item">
+                <label for="difficulty">Difficulty:</label>
+                <select id="difficulty">
+                    <option value="">Any</option>
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            
+            <div class="config-item">
+                <label for="numQuestions">Number of Questions:</label>
+                <input type="number" id="numQuestions" min="1" max="50" value="5">
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <button class="btn" id="generateBtn" onclick="generateQuestions()" disabled>
+                📝 Generate Quiz
+            </button>
+            <button class="btn" id="exportBtn" onclick="exportQuiz()" disabled style="background: #28a745;">
+                📥 Export Quiz
+            </button>
+        </div>
+        
+        <div id="responseSection"></div>
+        <div id="questionsContainer"></div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let currentQuestions = [];
+        let fileUploaded = false;
+        
+        // File upload handler
+        document.getElementById('fileInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const statusDiv = document.getElementById('uploadStatus');
+            statusDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Uploading...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    statusDiv.innerHTML = `<div class="response-section">✅ File uploaded: ${result.filename}</div>`;
+                    fileUploaded = true;
+                    document.getElementById('generateBtn').disabled = false;
+                } else {
+                    statusDiv.innerHTML = `<div class="response-section error">❌ Upload failed: ${result.detail}</div>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="response-section error">❌ Upload error: ${error.message}</div>`;
+            }
+        });
+        
+        // Generate questions
+        async function generateQuestions() {
+            if (!fileUploaded) {
+                alert('Please upload a file first!');
+                return;
+            }
+            
+            const questionType = document.getElementById('questionType').value;
+            const difficulty = document.getElementById('difficulty').value;
+            const numQuestions = parseInt(document.getElementById('numQuestions').value);
+            
+            const responseDiv = document.getElementById('responseSection');
+            responseDiv.innerHTML = '<div class="loading"><div class="spinner"></div>Generating questions...</div>';
+            
+            const questionsDiv = document.getElementById('questionsContainer');
+            questionsDiv.innerHTML = '';
+            
+            try {
+                const requestBody = {
+                    num_questions: numQuestions,
+                    question_type: questionType
+                };
+                
+                if (difficulty) {
+                    requestBody.difficulty = difficulty;
+                }
+                
+                const response = await fetch(`${API_BASE}/ask-model`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    currentQuestions = result.questions || [];
+                    responseDiv.innerHTML = `<div class="response-section">🎉 Generated ${currentQuestions.length} questions successfully!</div>`;
+                    displayQuestions(currentQuestions);
+                    document.getElementById('exportBtn').disabled = false;
+                } else {
+                    responseDiv.innerHTML = `<div class="response-section error">❌ Generation failed: ${result.detail}</div>`;
+                }
+            } catch (error) {
+                responseDiv.innerHTML = `<div class="response-section error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Display questions
+        function displayQuestions(questions) {
+            const container = document.getElementById('questionsContainer');
+            
+            if (questions.length === 0) {
+                container.innerHTML = '<div class="response-section">No questions generated.</div>';
+                return;
+            }
+            
+            const questionsHTML = questions.map((q, index) => {
+                let optionsHTML = '';
+                
+                if (q.type === 'multiple_choice' && q.options) {
+                    optionsHTML = Object.entries(q.options).map(([key, value]) => 
+                        `<div class="option-item">${key}. ${value}</div>`
+                    ).join('');
+                } else if (q.type === 'true_false') {
+                    optionsHTML = `
+                        <div class="option-item">True</div>
+                        <div class="option-item">False</div>
+                    `;
+                } else if (q.type === 'fill_in_blank') {
+                    optionsHTML = '<input type="text" placeholder="Fill in the blank..." style="width: 100%; padding: 10px; margin: 10px 0;">';
+                } else if (q.type === 'short_answer') {
+                    optionsHTML = '<textarea placeholder="Write your answer here..." style="width: 100%; padding: 10px; margin: 10px 0; height: 80px;"></textarea>';
+                } else if (q.type === 'matching' && q.left_items && q.right_items) {
+                    const leftItems = q.left_items.map((item, i) => `<div>${i + 1}. ${item}</div>`).join('');
+                    const rightItems = q.right_items.map((item, i) => `<div>${String.fromCharCode(65 + i)}. ${item}</div>`).join('');
+                    optionsHTML = `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div><h4>Match these:</h4>${leftItems}</div>
+                            <div><h4>With these:</h4>${rightItems}</div>
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="question-card">
+                        <div class="question-header">
+                            <span class="question-number">Q${index + 1}</span>
+                            <div class="question-meta">
+                                <span class="question-type">${q.type?.replace('_', ' ') || 'Question'}</span>
+                                ${q.difficulty ? `<span class="difficulty ${q.difficulty}">${q.difficulty.toUpperCase()}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="question-text">${q.question}</div>
+                        <div class="options-container">${optionsHTML}</div>
+                        <button class="show-answer-btn" onclick="toggleAnswer(${index})">Show Answer</button>
+                        <div class="answer-section" id="answer-${index}">
+                            <strong>Correct Answer: ${q.correct_answer}</strong>
+                            ${q.explanation ? `<p>${q.explanation}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = `
+                <div class="questions-container">
+                    <h3>📋 Generated Questions</h3>
+                    ${questionsHTML}
+                </div>
+            `;
+        }
+        
+        // Toggle answer visibility
+        function toggleAnswer(index) {
+            const answerDiv = document.getElementById(`answer-${index}`);
+            const btn = answerDiv.previousElementSibling;
+            
+            if (answerDiv.style.display === 'none' || answerDiv.style.display === '') {
+                answerDiv.style.display = 'block';
+                btn.textContent = 'Hide Answer';
+            } else {
+                answerDiv.style.display = 'none';
+                btn.textContent = 'Show Answer';
+            }
+        }
+        
+        // Export quiz
+        async function exportQuiz() {
+            if (currentQuestions.length === 0) {
+                alert('No questions to export. Generate questions first.');
+                return;
+            }
+            
+            const format = prompt('Export format (json/csv/txt):', 'json');
+            if (!format) return;
+            
+            try {
+                const exportData = {
+                    questions: currentQuestions,
+                    format_type: format,
+                    title: "TexToTest Generated Quiz",
+                    metadata: {
+                        question_type: document.getElementById('questionType').value,
+                        difficulty: document.getElementById('difficulty').value || "mixed",
+                        generated_by: "TexToTest Enhanced"
+                    }
+                };
+                
+                const response = await fetch(`${API_BASE}/export`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(exportData)
+                });
+                
+                if (response.ok) {
+                    if (format === 'pdf' || format === 'docx') {
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `quiz.${format}`;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    } else {
+                        const data = await response.json();
+                        const blob = new Blob([data.content], { type: data.content_type });
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = data.filename;
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    }
+                    
+                    document.getElementById('responseSection').innerHTML = 
+                        `<div class="response-section">✅ Quiz exported successfully as ${format.toUpperCase()}!</div>`;
+                } else {
+                    const error = await response.text();
+                    alert(`Export failed: ${error}`);
+                }
+            } catch (error) {
+                alert(`Export error: ${error.message}`);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('TexToTest Enhanced Quiz Generator Ready!');
+            console.log('🚀 All 8 enhancement features available:');
+            console.log('1. Multiple Question Types');
+            console.log('2. Enhanced Distractor Generation'); 
+            console.log('3. Question Difficulty Classification');
+            console.log('4. Automatic Question Categorization');
+            console.log('5. Multi-format Export');
+            console.log('6. Enhanced UI Controls');
+            console.log('7. Advanced Content Preprocessing');
+            console.log('8. Question Quality Validation');
+        });
+    </script>
+</body>
+</html>

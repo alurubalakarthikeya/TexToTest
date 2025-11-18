@@ -240,108 +240,20 @@ class DistractorGenerator:
         return None
 
 def create_multiple_choice_question(question: str, correct_answer: str, distractors: List[str]) -> Dict:
-    """Create a formatted multiple choice question with short options.
-
-    - Prefer single-word options; cap to a very short phrase when necessary.
-    - Deduplicate after normalization; backfill with short tokens if needed.
-    - Preserve correctness after normalization/shuffle.
-    """
-
-    def normalize_option(text: str, max_words: int = 2, max_chars: int = 24) -> str:
-        if not text:
-            return ""
-        # Strip quotes and brackets
-        t = re.sub(r'[\"\'\(\)\[\]\{\}]', '', str(text)).strip()
-        # Split on sentence/phrase delimiters and take the first chunk
-        t = re.split(r'[\n\r\.;:,.\u2013\u2014\-\u2014/]', t)[0].strip() or str(text).strip()
-        # Tokenize by whitespace
-        tokens = [tok for tok in re.split(r'\s+', t) if tok]
-        if not tokens:
-            return ""
-        # If too many words, prefer a single salient token
-        if len(tokens) > max_words:
-            # Prefer capitalized or alphabetic tokens, then longest
-            cand = None
-            alpha_tokens = [tok for tok in tokens if re.match(r'^[A-Za-z][A-Za-z\-]*$', tok)]
-            cap_tokens = [tok for tok in alpha_tokens if tok[0].isupper()]
-            if cap_tokens:
-                cand = max(cap_tokens, key=len)
-            elif alpha_tokens:
-                cand = max(alpha_tokens, key=len)
-            else:
-                cand = tokens[0]
-            tokens = [cand]
-        # Rejoin and hard-cap length
-        out = ' '.join(tokens).strip()
-        if len(out) > max_chars:
-            out = out[:max_chars].rstrip()
-        # Ensure mostly single word by removing trailing minor words
-        out_tokens = out.split()
-        if len(out_tokens) > 2:
-            out = out_tokens[0]
-        return out
-
-    def short_fallbacks(correct: str) -> List[str]:
-        pool = [
-            "Alpha", "Beta", "Gamma", "Delta", "Sigma", "Omega",
-            "Kappa", "Theta", "Zeta", "Eta", "Iota"
-        ]
-        # Avoid using the (normalized) correct as fallback
-        c = normalize_option(correct)
-        return [p for p in pool if p.lower() != (c or '').lower()]
-
-    # Build (text, is_correct) pairs
-    pairs = [(correct_answer, True)] + [(d, False) for d in (distractors or [])]
-    # Normalize all options to be short
-    norm_pairs: List[Tuple[str, bool]] = []
-    seen_lower = set()
-    for txt, is_ok in pairs:
-        norm = normalize_option(txt)
-        if not norm:
-            continue
-        key = norm.lower()
-        if key in seen_lower:
-            continue
-        seen_lower.add(key)
-        norm_pairs.append((norm, is_ok))
-
-    # Ensure the correct answer exists; if not, add normalized correct
-    if not any(flag for _, flag in norm_pairs):
-        c = normalize_option(correct_answer) or str(correct_answer).strip()[:24]
-        if c and c.lower() not in seen_lower:
-            norm_pairs.insert(0, (c, True))
-
-    # Backfill short fallbacks to reach 4 options
-    fb = short_fallbacks(correct_answer)
-    for token in fb:
-        if len(norm_pairs) >= 4:
-            break
-        if token.lower() not in seen_lower:
-            norm_pairs.append((token, False))
-            seen_lower.add(token.lower())
-
-    # If still fewer than 4, synthesize tiny variants of correct
-    while len(norm_pairs) < 4:
-        base = (normalize_option(correct_answer) or "Opt")
-        variant = base + random.choice(["X", "Prime", "Max", "Pro"])[:3]
-        if variant.lower() not in seen_lower:
-            norm_pairs.append((variant, False))
-            seen_lower.add(variant.lower())
-
-    # Shuffle and trim to 4
-    random.shuffle(norm_pairs)
-    norm_pairs = norm_pairs[:4]
-
-    # Determine correct option letter
-    correct_index = next((i for i, (_, flag) in enumerate(norm_pairs) if flag), 0)
-    correct_option = chr(65 + correct_index)
-
-    # Format options map
-    formatted_options = {chr(65 + i): txt for i, (txt, _) in enumerate(norm_pairs)}
-
+    """Create a formatted multiple choice question"""
+    options = [correct_answer] + distractors
+    random.shuffle(options)
+    
+    # Find the correct option letter
+    correct_option = chr(65 + options.index(correct_answer))  # A, B, C, D
+    
+    formatted_options = {}
+    for i, option in enumerate(options):
+        formatted_options[chr(65 + i)] = option
+    
     return {
         'question': question,
         'options': formatted_options,
         'correct_answer': correct_option,
-        'explanation': f"The correct answer is {correct_option}: {formatted_options[correct_option]}"
+        'explanation': f"The correct answer is {correct_option}: {correct_answer}"
     }

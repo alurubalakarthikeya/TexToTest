@@ -6,7 +6,7 @@ import Navbar from "./Components/NavBar.jsx";
 const API_BASE = (
   import.meta?.env?.VITE_API_BASE ||
   (typeof window !== 'undefined' && window.__API_BASE__) ||
-  "https://textotest.onrender.com"
+  "http://localhost:8000"
 ).replace(/\/$/, "");
 
 export default function App() {
@@ -20,6 +20,11 @@ export default function App() {
   const [uploadedFiles, setUploadedFiles] = useState([]); // ✅ store multiple uploaded files
   const [isLoading, setIsLoading] = useState(false);
   const [canGenerate, setCanGenerate] = useState(false); // becomes true after successful upload
+  const [questionType, setQuestionType] = useState("multiple_choice");
+  const [difficulty, setDifficulty] = useState("");
+  const [numQuestions, setNumQuestions] = useState(25);
+  const [availableFormats, setAvailableFormats] = useState({});
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   const quizRef = useRef(null);
   const startRectRef = useRef(null);
@@ -44,8 +49,16 @@ export default function App() {
       : { bottom: 70, left: 40, width: Math.min(1200, window.innerWidth - 40) };
 
     const targetTop = Math.max(navRect.bottom + 12, 12);
-    const targetLeft = navRect.left;
-    const targetWidth = Math.min(navRect.width, window.innerWidth - 24);
+    
+    // For mobile devices, center horizontally
+    const isMobile = window.innerWidth <= 768;
+    const targetWidth = isMobile 
+      ? Math.min(window.innerWidth - 24, 400) 
+      : Math.min(navRect.width, window.innerWidth - 24);
+    const targetLeft = isMobile 
+      ? (window.innerWidth - targetWidth) / 2 
+      : navRect.left;
+    
     const targetHeight = Math.max(window.innerHeight - targetTop - 12, 200);
 
     const computedStyle = window.getComputedStyle(el);
@@ -124,13 +137,22 @@ export default function App() {
   const handleGenerateClick = async () => {
     expandCard();
     setIsLoading(true);
-    setResponse("Generating multiple-choice questions...");
+    setResponse(`Generating ${questionType.replace('_', ' ')} questions...`);
 
     try {
+      const requestBody = { 
+        num_questions: numQuestions, 
+        question_type: questionType 
+      };
+      
+      if (difficulty) {
+        requestBody.difficulty = difficulty;
+      }
+
       const res = await fetch(`${API_BASE}/ask-model`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ num_questions: 25, question_type: "multiple_choice" }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!res.ok) {
@@ -146,7 +168,7 @@ export default function App() {
 
       const data = await res.json();
       setQuestions(data.questions || []);
-      setResponse(`Generated ${data.questions?.length || 0} multiple-choice questions successfully!`);
+      setResponse(`Generated ${data.questions?.length || 0} ${questionType.replace('_', ' ')} questions successfully!`);
     } catch (err) {
       console.error("Error fetching questions:", err);
       const msg = String(err?.message || err);
@@ -192,6 +214,81 @@ export default function App() {
     }
   };
 
+  const fetchExportFormats = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/export-formats`);
+      const data = await res.json();
+      setAvailableFormats(data.format_details || {});
+    } catch (err) {
+      console.error("Failed to fetch export formats:", err);
+    }
+  };
+
+  const handleExport = async (format) => {
+    if (questions.length === 0) {
+      alert("No questions to export. Generate questions first.");
+      return;
+    }
+
+    try {
+      const exportData = {
+        questions: questions,
+        format_type: format,
+        title: "TexToTest Generated Quiz",
+        metadata: {
+          question_type: questionType,
+          difficulty: difficulty || "mixed",
+          generated_by: "TexToTest"
+        }
+      };
+
+      const res = await fetch(`${API_BASE}/export`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(exportData),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Export failed: ${res.statusText}`);
+      }
+
+      // Handle binary downloads (PDF, DOCX)
+      if (format === 'pdf' || format === 'docx') {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `quiz.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        // Handle text downloads (JSON, TXT, XML)
+        const data = await res.json();
+        const blob = new Blob([data.content], { type: data.content_type });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = data.filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
+
+      setShowExportMenu(false);
+    } catch (err) {
+      console.error("Export error:", err);
+      alert(`Export failed: ${err.message}`);
+    }
+  };
+
+  // Fetch export formats on component mount
+  React.useEffect(() => {
+    fetchExportFormats();
+  }, []);
+
   return (
     <div className="app">
       <Navbar />
@@ -219,6 +316,51 @@ export default function App() {
             </label>
           </div>
 
+          {/* Question Configuration */}
+          <div className="question-config">
+            <div className="config-row">
+              <div className="config-item">
+                <label htmlFor="questionType">Question Type:</label>
+                <select 
+                  id="questionType" 
+                  value={questionType} 
+                  onChange={(e) => setQuestionType(e.target.value)}
+                  className="config-select"
+                >
+                  <option value="multiple_choice">Multiple Choice</option>
+                </select>
+              </div>
+
+              <div className="config-item">
+                <label htmlFor="difficulty">Difficulty:</label>
+                <select 
+                  id="difficulty" 
+                  value={difficulty} 
+                  onChange={(e) => setDifficulty(e.target.value)}
+                  className="config-select"
+                >
+                  <option value="">Any</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+
+              <div className="config-item">
+                <label htmlFor="numQuestions">Questions:</label>
+                <input 
+                  type="number" 
+                  id="numQuestions"
+                  min="5" 
+                  max="50" 
+                  value={numQuestions} 
+                  onChange={(e) => setNumQuestions(parseInt(e.target.value) || 25)}
+                  className="config-input"
+                />
+              </div>
+            </div>
+          </div>
+
           <button className="btn" onClick={handleGenerateClick} disabled={!canGenerate || isLoading}>
             {isLoading ? "Generating..." : (!canGenerate ? "Upload a file first" : "Generate Quiz")}
           </button>
@@ -234,13 +376,42 @@ export default function App() {
           style={inlineStyle ? inlineStyle : undefined}
         >
           {isFullyExpanded && (
-            <button
-              className="quiz-close"
-              onClick={collapseCard}
-              aria-label="Close"
-            >
-              ✕
-            </button>
+            <div className="quiz-header">
+              <button
+                className="quiz-close"
+                onClick={collapseCard}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+              
+              {questions.length > 0 && (
+                <div className="quiz-actions">
+                  <button
+                    className="export-btn"
+                    onClick={() => setShowExportMenu(!showExportMenu)}
+                  >
+                    📥 Export Quiz
+                  </button>
+                  
+                  {showExportMenu && (
+                    <div className="export-menu">
+                      {Object.entries(availableFormats).map(([format, info]) => (
+                        <button
+                          key={format}
+                          className={`export-option ${info.available ? '' : 'disabled'}`}
+                          onClick={() => info.available && handleExport(format)}
+                          disabled={!info.available}
+                          title={info.description}
+                        >
+                          {info.label} {!info.available && '(unavailable)'}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           )}
 
           <h2>Generated Quiz</h2>
@@ -276,31 +447,115 @@ export default function App() {
                   <p>Using OpenRouter Mistral AI to create multiple-choice questions with distractors</p>
                 </div>
               ) : questions.length > 0 ? (
-                questions.map((mcq, idx) => (
-                  <div className="mcq-card" key={idx} style={{animationDelay: `${idx * 0.1}s`}}>
+                questions.map((question, idx) => (
+                  <div className="question-card" key={idx} style={{animationDelay: `${idx * 0.1}s`}}>
                     <div className="question-header">
                       <span className="question-number">Q{idx + 1}</span>
-                      <h3 className="question-text">{mcq.question}</h3>
+                      <div className="question-meta">
+                        <span className="question-type">{question.type?.replace('_', ' ') || 'Multiple Choice'}</span>
+                        {question.difficulty && (
+                          <span className={`difficulty ${question.difficulty}`}>
+                            {question.difficulty.toUpperCase()}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="question-text">{question.question}</h3>
                     </div>
                     
-                    <div className="options-container">
-                      {Object.entries(mcq.options || {}).map(([letter, text]) => (
-                        <label className="option-label" key={letter}>
+                    <div className="question-content">
+                      {/* Multiple Choice Questions */}
+                      {question.type === 'multiple_choice' && question.options && (
+                        <div className="options-container">
+                          {Object.entries(question.options).map(([letter, text]) => (
+                            <label className="option-label" key={letter}>
+                              <input 
+                                type="radio" 
+                                name={`question-${idx}`} 
+                                value={letter}
+                                className="option-input"
+                              />
+                              <div className="option-content">
+                                <span className="option-letter">{letter}.</span>
+                                <span className="option-text">{text}</span>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* True/False Questions */}
+                      {question.type === 'true_false' && (
+                        <div className="tf-container">
+                          <label className="option-label">
+                            <input type="radio" name={`question-${idx}`} value="true" />
+                            <div className="option-content">
+                              <span className="option-letter">True</span>
+                            </div>
+                          </label>
+                          <label className="option-label">
+                            <input type="radio" name={`question-${idx}`} value="false" />
+                            <div className="option-content">
+                              <span className="option-letter">False</span>
+                            </div>
+                          </label>
+                        </div>
+                      )}
+
+                      {/* Fill in the Blank */}
+                      {question.type === 'fill_in_blank' && (
+                        <div className="fib-container">
                           <input 
-                            type="radio" 
-                            name={`question-${idx}`} 
-                            value={letter}
-                            className="option-input"
+                            type="text" 
+                            className="fill-input" 
+                            placeholder="Enter your answer..."
                           />
-                          <div className="option-content">
-                            <span className="option-letter">{letter}.</span>
-                            <span className="option-text">{text}</span>
+                        </div>
+                      )}
+
+                      {/* Short Answer */}
+                      {question.type === 'short_answer' && (
+                        <div className="sa-container">
+                          <textarea 
+                            className="short-answer-input" 
+                            placeholder="Write your answer here..."
+                            rows="3"
+                          />
+                        </div>
+                      )}
+
+                      {/* Matching */}
+                      {question.type === 'matching' && question.left_items && question.right_items && (
+                        <div className="matching-container">
+                          <div className="matching-columns">
+                            <div className="left-column">
+                              <h4>Match these:</h4>
+                              {question.left_items.map((item, i) => (
+                                <div key={i} className="match-item left-item">
+                                  {i + 1}. {item}
+                                </div>
+                              ))}
+                            </div>
+                            <div className="right-column">
+                              <h4>With these:</h4>
+                              {question.right_items.map((item, i) => (
+                                <div key={i} className="match-item right-item">
+                                  {String.fromCharCode(65 + i)}. {item}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </label>
-                      ))}
+                        </div>
+                      )}
                     </div>
                     
                     <div className="question-footer">
+                      <div className="question-info">
+                        {question.category && (
+                          <span className="category">📚 {question.category}</span>
+                        )}
+                        <span className="points">⭐ {question.points || 1} pt(s)</span>
+                      </div>
+                      
                       <button
                        className="reveal-answer-btn"
                        onClick={(e) => {
@@ -322,8 +577,8 @@ export default function App() {
                      </button>
                      
                       <div className="explanation" style={{display: 'none'}}>
-                        <strong>Correct Answer: {mcq.correct_answer}</strong>
-                        <p>{mcq.explanation}</p>
+                        <strong>Correct Answer: {question.correct_answer}</strong>
+                        <p>{question.explanation}</p>
                       </div>
                     </div>
                   </div>

@@ -1,0 +1,643 @@
+Computer Networks
+MODULE 1 1
+Prof. Mala B A & Prof. Suvika K V
+Assistant Professor,
+Dept. of CSE
+ Theory –Module1 -INTRODUCTION 2
+Topics
+1.Uses of Computer Networks
+2.Types of Computer Networks
+3.Network Technology, From Local to Global
+4.Examples of Networks
+5.Network Protocols
+6.Reference Models 
+7.Standardization Introduction
+⮚Acomputer network isasetofcomputers connected together forthepurpose ofsharing resources .
+⮚The most common resource shared today isconnection totheinternet .3
+ Differences4
+Network Networking
+A set of computing devices connected together 
+for the purpose of sharing information and 
+resources. Total process of creating and using computer 
+networks, w.r.t hardware, protocols, and 
+software, including wired and wireless 
+technology. 1. Uses of Computer Networks5
+Access to 
+Information
+Person -to-
+Person 
+Communication
+Electronic 
+Commerce
+Entertainment
+The Internet of 
+Things i. Access to Information6
+⮚Information can beaccessed invarious forms, particularly through theInternet .
+⮚Web browsers areacommon tool forretrieving information from websites, including social media sites .
+⮚Mobile applications onsmartphones also provide access toremote information .
+⮚Information available covers awide range oftopics including arts, business, cooking, government, health, history,
+hobbies, science, sports, travel, and more .
+⮚News organizations areincreasingly moving online, with some ceasing print operations .
+⮚Online news isbecoming more personalizable, allowing users tochoose specific interests .
+⮚Social media platforms are increasingly curating news, where users can post and share content from various
+sources .
+⮚The news seen byusers isoften personalized through algorithms based onuser history .
+⮚Organizations like ACM and IEEE Computer Society have made their journals and proceedings available
+online . Contd..7
+⮚Much oftheinformation ontheInternet isaccessed viaaclient -server model .
+⮚Inthis model, aclient requests information from aserver, which then responds .
+⮚This model iswidely used, including forweb applications, where aserver generates web pages inresponse toclient
+requests .
+Figure 1: A network with two clients and one 
+server
+Figure 2: The client -server model involves 
+requests and responses Contd..8
+Figure 3: In a peer -to-peer system, there are no fixed clients and servers
+⮚Peer -to-peer (P2P)communication involves individuals communicating directly without afixed division into
+clients and servers .
+⮚P2Pcommunication became popular with music sharing services like Napster and isstill used today forlegal
+purposes, such assharing public domain music and downloading software . ii. Person -to-Person Communication9
+⮚Email iswidely used globally, often including audio, video, text, and pictures .
+⮚Instant messaging ispopular, allowing real -time text communication between individuals .
+⮚The Internet isused tocarry audio (e.g.,Internet radio, streaming music) and video (e.g.,Netflix, YouTube) .
+⮚Internet -based communication can becrucial forthose inremote areas, offering access toservices comparable to
+those inurban centers .
+⮚Social networks bridge person -to-person communication and information access, driven byuser relationships .
+⮚Facebook isaleading social networking site, allowing profile updates and sharing among friends .
+⮚People can work together tocreate content, such asthrough wikis .
+⮚Wikipedia isthemost famous wiki, allowing anyone toread oredit content, with thousands ofother wikis existing . iii. Electronic Commerce10
+⮚Online Shopping :Online shopping ishighly popular, allowing users tobrowse catalogs from thousands of
+companies and have products delivered totheir homes .
+⮚E-commerce inFinance :People pay bills, manage bank accounts, and handle investments electronically .
+⮚Online Auctions :Online auctions forsecond -hand goods have become amassive industry .Unlike traditional e-
+commerce, online auctions aremore peer -to-peer, where consumers can beboth buyers and sellers .
+⮚Certain forms ofe-commerce have acquired terms ortags based onthe pronunciation similarity between "to"
+and "2,"with popular examples listed inthebelow figure .
+Figure 4: Some forms of e -commerce iv. Entertainment11
+⮚Entertainment athome has advanced significantly with thedistribution ofmusic, radio, TVprograms, and movies
+over theInternet .
+⮚Users can find, buy, and download MP3songs and high -definition movies toadd totheir personal collections .
+⮚Entertainment content can bemoved around thehome between different devices, displays, and speakers, typically
+through awireless network .
+⮚Inthefuture, itmay bepossible toinstantly search forand display any movie orTVprogram ever made .
+⮚New films may become interactive, allowing viewers toinfluence the story direction, with alternative scenarios
+provided .
+⮚Live television might become interactive, where audiences participate inquiz shows orchoose among contestants .
+⮚Multi -person real -time simulation games arealready popular . v. The Internet of Things12
+⮚Ubiquitous computing refers tocomputing embedded ineveryday life, asenvisioned byMark Weiser in1991 .
+⮚Many homes areequipped with security systems, including door and window sensors, and can integrate additional
+sensors forsmart home monitoring .
+⮚Smart electricity, gas, and water meters can report usage over thenetwork, eliminating theneed formanual meter
+reading .
+⮚Smoke detectors can automatically alert thefire department, and smart refrigerators could reorder groceries when
+supplies arelow.
+⮚The IoT revolution isconnecting nearly every electronic device tothe Internet, enabling more measurement and
+reporting through networks . 2. Types of Computer Networks13
+Broadband 
+Access 
+Networks
+Mobile and 
+Wireless 
+Access 
+Networks
+Content 
+Provider 
+Networks
+Transit 
+Networks
+Enterprise 
+Networks i. Broadband Access Networks14
+⮚In1977 ,Ken Olsen ofDigital Equipment Corporation claimed there was noneed forpersonal computers at
+home, aprediction that proved incorrect asDigital eventually vanished .
+⮚Initially used forword processing and games, home computers now primarily provide Internet access .Modern
+consumer electronics, including set-top boxes, game consoles, and televisions, feature embedded computers
+connected tonetworks .
+⮚Home networks arewidely used formanaging entertainment content .Internet access allows users toconnect to
+remote computers, access information, communicate, and shop .
+⮚Metcalfe’s Law explains theInternet’s popularity bystating itsvalue increases with thesquare ofthenumber of
+users .
+⮚Broadband access isexpanding globally, with speeds rising togigabit levels indeveloped countries and mobile
+access being more common indeveloping regions . ii. Mobile and Wireless Access Networks15
+⮚Mobile computers like laptops, tablets, and smartphones are among the fastest -growing segments inthe
+computer industry, surpassing desktop sales .
+⮚People use these devices for arange ofactivities, including email, social media, streaming media, and web
+browsing from virtually anywhere .
+⮚Connectivity iscrucial, with wireless networks —cellular and Wi-Fi—providing access inplaces where wired
+connections areimpractical, such ascars and airplanes .
+⮚Wireless networks also support various applications, from fleet management toride -sharing services .
+⮚Additionally, mobile phones, which combine telephony and computing, have become central tomobile
+commerce (m-commerce), facilitating payments and transactions viaSMS and NFC technology .
+⮚The rise ofmobile technology and wireless networks isdriving innovations like sensor networks and wireless
+parking meters, promising torevolutionize both daily lifeand scientific research . Contd..16
+Figure 5: Combinations of wireless networks and mobile computing iii. Content provider Networks17
+⮚Many Internet services are hosted inlarge "cloud" data centers with thousands ofservers, designed forhigh
+data transfer and energy efficiency .
+⮚Early data center designs used athree -layer tree topology but had scalability issues .Content Delivery Networks
+(CDNs) help deliver content globally byplacing servers close tousers .
+⮚Major providers like Google, Facebook, and Netflix operate their own CDNs, while services like Akamai and
+Cloudflare offer CDN solutions toothers .
+⮚CDNs manage content replication and selection based onproximity, server load, and network congestion . iv. Transit Networks18
+⮚The Internet operates over multiple independently managed networks .
+⮚Typically, your ISP's network differs from the one hosting website content .Content travels from data -center
+networks through transit networks toreach your ISPand device .
+⮚Transit networks, historically profitable asbackbone providers, charge ISPs and content providers fortraffic .
+⮚Recently, content consolidation with large providers and theexpansion ofaccess ISPs have reduced reliance on
+transit networks .
+⮚Larger networks now often prefer direct interconnection, using transit networks primarily asabackup . v. Enterprise Networks19
+⮚Resource Sharing :Efficiently share physical resources (e.g.,printers) and crucial data across thenetwork .
+⮚Remote Access :Enable access todata and applications from various locations, overcoming geographical barriers .
+⮚Enhanced Communication :Facilitate email, IPtelephony, video conferencing, and desktop sharing toimprove
+collaboration and reduce travel .
+⮚Electronic Business :Conduct transactions and manage orders online tostreamline operations and reduce
+inventory . 3. Network Topology, From Local to Global 20
+Personal Area 
+Networks
+Local Area 
+Networks
+Home 
+Networks
+Metropolitan 
+Area 
+Networks
+Wide Area 
+Networks
+Internetworks
+ Video –1 –Types of Networks21
+https://www.youtube.com/watch?v=v5cDIzQFntI
+https://youtu.be/yFftyo2uld0?si=0S -BT7pSQ6Wjuz1I i. Personal Area Networks22
+⮚Personal Area Networks (PANs) enable short -range communication between devices, such asconnecting a
+computer toperipherals orlinking wireless headphones and smartphones .
+⮚Bluetooth isacommon PAN technology that simplifies these connections without cables, using amaster -slave model
+where thePCmanages other devices .
+⮚Other short -range communication technologies arealso available and will bediscussed further .
+Figure 6: Bluetooth PAN configuration ii. Local Area Networks23
+⮚Local Area Networks (LANs) are private networks used within abuilding, such ashomes oroffices, toconnect and
+share resources like printers and information among computers and electronics .
+⮚Wireless LANs, popular invarious settings, use radio modems and antennas tocommunicate with Access Points
+(APs) orrouters, which relay packets between devices and theInternet .
+⮚Mesh networks, where devices relay packets forone another, arecommon indeveloping regions and large homes .
+⮚The IEEE 802 .11standard, commonly known asWiFi, supports speeds from 11Mbps to7Gbps .
+⮚Wired LANs, using technologies like copper, coaxial cable, and optical fiber, generally offer higher speeds (100 Mbps
+to40Gbps), lower latency, and fewer errors compared towireless LANs .
+⮚Ethernet, governed byIEEE 802 .3,isthe most common wired LAN type, using switches torelay packets between
+connected computers .
+⮚Ethernet switches use ananti -looping algorithm tomanage packet routing effectively . Contd..24
+⮚LANs can bedivided into logical networks, called VLANs (Virtual LANs), tomatch organizational structures .
+⮚VLANs allow fortraffic separation within aphysical LAN, enhancing management .
+⮚Traditional Ethernet used asingle linear cable forbroadcasting packets, while modern switched Ethernet does not.
+⮚Resource allocation inLANs can bestatic ordynamic, with dynamic methods being centralized (controlled bya
+single entity) ordecentralized (where each machine manages itstransmission) .
+Figure 7: Wireless and wired LANs (a) 802.11 (b) Switched Ethernet
+ iii. Home Networks25
+⮚Home networks, atype ofLAN, connect awide range ofInternet -enabled devices, including smartphones, smart
+appliances, and security systems .
+⮚They must beuser -friendly, secure, and reliable due tothediverse and growing number ofconnected devices .
+⮚Wireless networks are commonly used fortheir convenience and low cost but face challenges like performance
+bottlenecks and security risks .
+⮚With devices evolving organically and needing tointeroperate, ensuring compatibility and security while keeping
+costs low iscrucial .
+⮚Power -line networks areanalternative forextending connectivity but come with their own limitations iv. Metropolitan Area Network 26
+⮚AMetropolitan Area Network (MAN) covers anentire city and includes systems like cable television networks .
+⮚Originally, these networks were used forTVreception via community antennas but evolved toinclude Internet
+service byutilizing unused parts ofthespectrum .
+⮚Cable TVsystems transformed into MANs byproviding both television and Internet services .
+⮚Another example ofaMAN isWiMAX (IEEE 802 .16),ahigh -speed wireless Internet technology, though ithas not
+become widespread .
+⮚Other wireless technologies, such asLTE and 5G,also serve asMANs .
+Figure 8: A metropolitan area network based on cable TV v. Wide Area Networks27
+⮚AWide Area Network (WAN) spans large areas like countries or
+continents, connecting multiple locations .Itincludes :
+1.Subnet :The communication part ofthe WAN, consisting of
+transmission lines (e.g.,fiber, copper) and routers that direct data
+traffic .
+2.Routing and Forwarding :Routers determine the best data paths
+and send packets totheir destinations .
+3.Management :InWANs, hosts and the subnet are often managed
+separately, with WANs connecting different networking technologies
+and sometimes entire LANs .
+4.Internetworks :Many WANs combine various networks and
+technologies into one system .Figure 9: A metropolitan area 
+network based on cable TV
+ 28 NOTE29
+Figure 11: WAN using an ISP 
+network
+Figure 10: WAN using a virtual 
+private network vi. Internetworks30
+⮚Toconnect different networks, which often use various hardware and software technologies, aninternetwork (or
+internet )iscreated .This term generally refers toacollection ofinterconnected networks, asopposed tothespecific
+global Internet .
+⮚Internetworks :These connect distinct networks, such asLANs and WANs, ortwo LANs, often involving different
+technologies .
+⮚Gateways :Devices that connect networks and handle necessary translations arecalled gateways .
+⮚Routers :These arenetwork -layer gateways that direct packets between networks .Large networks often use many
+routers tomanage data traffic . 4. Examples of Networks 31
+The Internet
+The ARPANET
+NSFNET
+The Internet 
+Architecture
+Mobile 
+Networks
+Mobile Network 
+Architecture
+Packet Switching 
+and Circuit 
+Switching
+Early Generation 
+Mobile 
+Networks: 1G, 
+2G and 3G
+Modern Mobile 
+Networks: 4G 
+and 5G
+Wireless 
+Networks 
+(WiFi) a. The Internet32
+⮚The Internet isavast network ofinterconnected systems using common protocols and services .
+The 
+Internet
+The 
+ARPANET
+NSFNET
+The Internet 
+Architecture i. The ARPANET33
+⮚Itisabbreviated as“Advanced Research Project AgencyNetwork” .
+⮚Inmid 60’sDepartment ofDefense (DoD) started ARPANET tobuild anetwork that could resist any attacks from
+USSR and help academicians share research .
+⮚ARPANET used thepacket -switching technology tointerconnect four nodes .
+⮚Hence DoD divided thenetwork into subnets and host computers .
+⮚The subnet software consisted oftheIMP end ofthehost -IMP connection, theIMP -IMP protocol, and asource IMP to
+destination IMP protocol designed toimprove reliability .
+⮚Subnet would consist ofminicomputers called“Interface Message Processors” (IMPs) connected bytransmission
+lines .
+Figure 12: WAN using an ISP network ii. NFSNET34
+⮚Bythe late 1970 s,the NSF recognized the value ofARPANET forresearch but needed abroader network .In1981 ,
+NSF funded CSNET toconnect computer science departments toARPANET .
+⮚Later, they developed NSFNET, connecting sixsupercomputers with TCP/IP, marking the first large -scale TCP/IP
+network .
+⮚AsNSFNET expanded, ittransitioned tocommercial operation, leading tothecreation ofANS and multiple NAPs to
+support competitive internet services .
+⮚This shift laid the foundation forthe modern Internet .The World Wide Web's rise inthe 1990 sfueled exponential
+growth, with theInternet now dominated bystreaming and social media, drastically increasing traffic and reshaping
+itsarchitecture
+Figure 13: The NSFNET backbone in 
+1988 iii. The Internet Architecture35
+⮚The Internet's architecture has evolved significantly due togrowth and industry convergence, such as"triple play"
+services .
+⮚Ahome computer connects totheInternet through anISP, often viacable (HFC networks) orfiber (FTTH) .
+⮚ISPs operate POPs (Points ofPresence) forpacket entry, and they connect atIXPs (Internet Exchange Points) to
+exchange traffic .
+⮚Peering agreements between ISPs determine packet paths, with tier-1ISPs like AT&T forming the backbone ofthe
+Internet .
+⮚Content providers, such asFacebook and Netflix, host servers indata centers, often directly connected toISPs,
+bypassing traditional hierarchies .
+⮚The rise of"hyper -giant" content providers and CDNs has flattened the Internet's architecture, allowing direct
+connections between access ISPs and content providers . b. Mobile Networks36
+⮚Mobile networks have over five billion subscribers, about 65%ofthe global population, with most having Internet
+access ontheir devices .
+⮚In2018 ,mobile Internet traffic surpassed half ofglobal online traffic, making the study ofmobile phone systems
+essential .
+Mobile 
+Networks
+Mobile 
+Network 
+Architecture
+Packet 
+Switching 
+and Circuit 
+Switching
+Early 
+Generation 
+Mobile 
+Networks: 
+1G, 2G and 
+3G
+Modern 
+Mobile 
+Networks: 4G 
+and 5G i. Mobile Network Architecture37
+⮚The architecture ofmobile phone networks, particularly 4GLTE, differs significantly from theInternet .
+⮚The radio communication protocol between mobile devices and base stations, known asE-UTRAN, forms the
+wireless side, while thecore network, EPC (Evolved Packet Core), handles data traffic .
+⮚Mobile networks have evolved tofully packet -switched systems, supporting higher data rates than earlier
+generations .
+⮚Mobility ismanaged through handovers between base stations, ensuring seamless connectivity .
+⮚Security isalso apriority, with SIM cards used forauthentication and encryption, providing better privacy than
+earlier systems . Mobile Network Architecture38
+Figure 14: The Internet architecture through the 1990s followed a hierarchical structure Mobile Network Architecture39
+Figure 15: Flattening of the Internet hierarchy
+ ii. Packet Switching and Circuit Switching40
+Circuit Switching Packet Switching
+In-circuit switching has there are 3 phases:
+i) Connection Establishment.
+ii) Data Transfer.
+iii) Connection Released.In Packet switching directly data transfer takes place.
+Here, each data unit knows the entire path address 
+which is provided by the source.Here, each data unit just knows the final destination 
+address intermediate path is decided by the routers.
+In-Circuit switching, data is processed at the source 
+system onlyIn Packet switching, data is processed at all 
+intermediate nodes including the source system.
+The delay between data units in circuit switching is 
+uniform.The delay between data units in packet switching is not 
+uniform.
+Circuit switching is more reliable. Packet switching is less reliable.
+Wastage of resources is more in Circuit Switching.Less wastage of resources as compared to Circuit 
+Switching.
+It is not a store and forward technique. It is a store and forward technique. iii. Early Generation Mobile Networks: 1G, 2G, and 3G41
+⮚Mobile networks have evolved significantly over 50years :
+▪1G(e.g.,AMPS, 1982 ):Used analog signals forvoice .
+▪2G(e.g.,GSM, 1991 ):Introduced digital voice and text messaging .
+▪3G(e.g.,UMTS, 2001 ):Added broadband data services with speeds upto14Mbps downlink .
+⮚Tomanage radio spectrum scarcity, mobile networks use acellular design that reuses frequencies while minimizing
+interference .Spectrum licensing, often through expensive auctions, iscrucial fornetwork operation . iv. Modern Mobile Networks: 4G and 5G42
+Future mobile networks arefocused onmobile broadband rather than just voice calls .
+⮚4GLTE :Launched inthelate 2000 s,offering faster speeds and became dominant over alternatives like WiMAX .
+⮚5G:Setforearly 2020 s,promises speeds upto10Gbps and operates athigher frequencies (up to6GHz) .Higher
+frequencies face challenges such asshorter signal range and increased susceptibility tointerference and weather
+conditions .Toaddress these, 5Guses advanced technologies like MIMO antennas and improved algorithms . c. Wireless Networks (WiFi)43
+⮚The IEEE 802 .11standard, developed inthe mid -1990 s,unified wireless LANs, addressing earlier compatibility
+issues .
+⮚Operating inunlicensed ISM bands, itavoids thecost oflicensed spectrum but faces potential interference .
+⮚The standard includes infrastructure mode with access points and adhoc mode fordirect client communication .
+⮚Itevolved from initial speeds of1-2Mbps to54Mbps with 802 .11a/g, and now supports upto3.5Gbps with
+802 .11acand 7Gbps with 802 .11ad,though thelatter islimited toindoor use.
+⮚Ituses CSMA formanaging interference and collisions, with security improving from WEP toWPA 2and WPA 3.
+⮚Today, 802 .11iswidespread, extending tovarious devices and vehicles, and integrating with technologies like LTE -
+Uforunlicensed spectrum use. 5. Network Protocols44
+Design goals
+Reliability
+Resource 
+Allocation
+Evolvability
+Security
+Protocol 
+Layering
+Connections and 
+Reliability
+Connection -
+Oriented 
+Service
+Connectionless 
+Service
+Reliability
+Service 
+Primitives
+The Relationship 
+of Services to 
+protocols a. Design Goals45
+Design goals
+ReliabilityResource 
+AllocationEvolvability Security i. Reliability46
+⮚Reliability involves ensuring thenetwork operates correctly despite unreliable components .Bits inapacket may be
+damaged due tonoise, signals, orfaults .
+⮚Error detection codes can identify errors, and retransmission ensures correct receipt .
+⮚Error correction codes can recover theoriginal message from incorrect bits.
+⮚These methods use redundant information and areapplied both atlow layers forindividual links and high layers for
+overall data integrity .
+⮚Another issue isfinding aworking path through thenetwork .
+⮚Multiple paths often exist, and some links orrouters may bedown .
+⮚For example, ifthenetwork isdown inBerlin, packets from London toRome can bererouted through Paris .
+⮚This process isknown asrouting, which thenetwork should handle automatically . ii. Resource Allocation47
+⮚Inlarge networks, challenges similar tocity traffic jams and shortages arise .Scalable designs continue towork well
+asnetworks grow .Networks manage resources like transmission line capacity toensure one hostdoesn’t interfere
+toomuch with another .
+⮚Statistical multiplexing isamethod where network bandwidth isshared dynamically based onshort -term demand,
+rather than fixed allocations .This can beapplied atboth low and high layers .
+⮚Flow control addresses the issue offast senders overwhelming slow receivers, typically through feedback
+mechanisms .Congestion occurs when too many devices demand more resources than the network can provide,
+leading tostrategies forreducing demand during overload .
+⮚Beyond bandwidth, networks must also address timeliness forreal -time applications .Quality ofservice mechanisms
+balance real -time delivery with high throughput needs . iii. Evolvability48
+⮚Another design issue isnetwork evolution .Asnetworks grow and new designs emerge, they need toconnect with
+existing infrastructure .
+⮚Protocol layering isakey strategy formanaging change bydividing theproblem and hiding implementation details .
+⮚Additionally, each layer requires addressing ornaming mechanisms toidentify message senders and receivers .
+⮚Different network technologies have varied limitations .
+⮚For instance, some channels donotpreserve message order, requiring numbering solutions .
+⮚Variations inmaximum message size necessitate mechanisms forbreaking down, transmitting, and reassembling
+messages .
+⮚This overall process isknown asinternetworking . iv. Security49
+⮚The final major design issue isnetwork security .
+⮚Key threats include eavesdropping oncommunications .
+⮚Confidentiality mechanisms protect against this byensuring data privacy across multiple layers .
+⮚Authentication mechanisms prevent impersonation, helping todistinguish legitimate sites and verify caller
+identities .
+⮚Integrity mechanisms guard against unauthorized changes tomessages, such asaltering transaction amounts . b. Protocol Layering50
+⮚Tomanage design complexity, networks use alayered structure, where each layer builds ontheone below it.
+⮚The number, names, functions, and contents oflayers vary bynetwork .
+⮚Each layer provides services tothelayer above while hiding implementation details .
+⮚This concept, known asinformation hiding orencapsulation, iscommon incomputer science .
+⮚When layers ondifferent machines communicate, they follow specific rules and conventions known asthelayer’s
+protocol .
+⮚Aprotocol isanagreement onhow communication should proceed .For example, insocial interactions, thechoice of
+greeting depends onthecontext, similar tohow adhering toprotocol ensures effective communication . Contd..51
+⮚The entities comprising the corresponding layers on
+different machines are called peers .The peers may be
+software processes, hardware devices, or even human
+beings .
+⮚Between each pair ofadjacent layers isaninterface .The
+interface defines which primitive operations and services the
+lower layer makes available totheupper one.
+⮚Aset of layers and protocols iscalled anetwork
+architecture .
+⮚Alistoftheproto cols used byacertain system, one protocol
+per layer, iscalled aprotocol stack .
+Figure 16: Layers, protocols, and interfaces c. Connections and Reliability52
+Connections and 
+Reliability
+Connection -
+Oriented ServiceConnectionless 
+ServiceReliability i. Connection -Oriented Service53
+⮚Connection -oriented service isrelated tothe telephone system .Itincludes connection establishment and
+connection termination .Inaconnection -oriented service, theHandshake method isused toestablish theconnection
+between sender and receiver .
+ ii. Connectionless Service54
+⮚Connection -less service isrelated tothe postal system .Itdoes not include any connection establishment and
+connection termination .Connection -less Service does not give aguarantee ofreliability .Inthis, Packets donot
+follow the same path toreach their destination .There are different names formessages indifferent contexts ;a
+packet isamessage atthenetwork layer .When theintermediate nodes receive amessage infullbefore sending iton
+tothenext node, this iscalled store -and -forward switching .
+ Differences55
+Connection Oriented Service Connectionless Service
+It is related to the telephone system. It is related to the postal system.
+Connection -oriented service is preferred by long and 
+steady communication.Connection -less Service is preferred by bursty 
+communication.
+In connection -oriented Service, Congestion is not 
+possible.In connection -less Service, Congestion is possible.
+Connection -oriented Service gives the guarantee of 
+reliability.Connection -less Service does not give a guarantee of 
+reliability.
+In connection -oriented Service, Packets follow the 
+same route.In connection -less Service, Packets do not follow the 
+same route.
+Connection -oriented requires authentication.Connection -less Service does not require 
+authentication. iii. Reliability56
+⮚Connection -oriented and connectionless services can each becharacterized bytheir reliability .Some services are
+reliable inthe sense that they never lose data .Usually, areliable service isimplemented byhaving the receiver
+acknowledge the receipt ofeach message sothe sender issure that itarrived .The acknowledgement process
+introduces overhead and delays, which areoften worth itbut sometimes theprice that has tobepaid forreliability
+istoohigh .
+Figure 17: Six different types of service d. Service Primitives57
+⮚Aservice isformally specified byasetofprimitives (operations) available touser processes toaccess theservice .
+⮚These primitives telltheservice toperform some action orreport onanaction taken byapeer entity .
+Figure 18: Six service primitives that provide 
+a simple connection -oriented service Contd…58
+Figure 19: A simple client -server interaction 
+using acknowledged datagrams
+ e. The Relationship of Services to Protocols59
+⮚Aprotocol, incontrast, isasetofrules governing the format and meaning ofthe packets, ormessages that are
+exchanged bythepeer entities within alayer .Entities use protocols inorder toimplement their service definitions .
+They arefree tochange their protocols atwill, provided they donot change theservice visible totheir users .Inthis
+way, theservice and theprotocol arecompletely decoupled .This isakey concept that any network designer should
+understand well .
+Figure 20: The relationship between a service 
+and a protocol.
+ 6. Reference Models60
+The OSI Reference Model
+The TCP/IP Reference Model Video –2 –OSI MODEL61
+https://youtu.be/Q3WpcO6vtQ8?si=tyWOd5O Video –3 –OSI MODEL -Reference62
+https://www.youtube.com/watch?v=_CfJI0NGf80 a. The OSI Reference Model63
+Figure 21: The OSI reference model Data Referred in each layer of OSI Model64
+•Application, Presentation and Session Layer
+ Data
+•Transport Layer
+ Segment
+•Networking Layer
+ Packet
+•Data Link Layer
+ Frame 
+•Physical Layer
+ Bits  Contd…65
+⮚Itiscalled the ISO OSI (Open Systems Interconnection) Reference Model because itdeals with connecting open
+systems—that is,systems that areopen forcommunication with other systems .
+⮚The OSI model has seven layers .The principles that were applied toarrive atthe seven layers can bebriefly
+summarized asfollows :
+1.Alayer should becreated where adifferent abstraction isneeded .
+2.Each layer should perform awell -defined function .
+3.The function ofeach layer should bechosen with aneye toward defining internationally standardized protocols .
+4.The layer boundaries should bechosen tominimize theinformation flow across theinterfaces .
+5.The number oflayers should belarge enough that distinct functions need not bethrown together inthesame layer
+outofnecessity and small enough that thearchitecture does notbecome unwieldy .
+⮚Three concepts arecentral totheOSI model :
+1.Services
+2.Interfaces
+3.Protocols Physical Layer66
+⮚Deals with allaspects ofphysically moving data from one computer tothenext
+⮚Converts data from theupper layers into 1sand 0sfortransmission over media
+⮚Defines how data isencoded onto themedia totransmit thedata
+⮚Defined onthis layer :Cable standards, wireless standards, and fiber optic standards .
+⮚Copper wiring, fiber optic cable, radio frequencies, anything that can beused totransmit data isdefined onthe
+Physical layer oftheOSI Model
+⮚Device example :Hub
+⮚Used totransmit data Data Link Layer67
+⮚Isresponsible formoving frames from node tonode orcomputer tocomputer
+⮚Can move frames from one adjacent computer toanother, cannot move frames across routers
+⮚Encapsulation =frame
+⮚Requires MAC address orphysical address
+⮚Protocols defined include Ethernet Protocol and Point -to-Point Protocol (PPP)
+⮚Device example :Switch
+⮚Two sublayers :Logical Link Control (LLC) and theMedia Access Control (MAC)
+✔Logical Link Control (LLC)–Data Link layer addressing, flow control, address notification, error control
+✔Media Access Control (MAC)–Determines which computer has access tothe network media atany given time .
+Determines where one frame ends and thenext one starts, called frame synchronization Network Layer68
+⮚Responsible formoving packets (data) from one end ofthenetwork totheother, called end-to-end communications
+⮚Requires logical addresses such asIPaddresses
+⮚Device example :Router
+⮚Routing isthe ability ofvarious network devices and their related software tomove data packets from source to
+destination Transport Layer69
+⮚Takes data from higher levels ofOSI Model and breaks itinto segments that can besent tolower -level layers for
+data transmission
+⮚Conversely, reassembles data segments into data that higher -level protocols and applications can use
+⮚Also puts segments incorrect order (called sequencing )sothey can bereassembled incorrect order atdestination
+⮚Concerned with thereliability ofthetransport ofsent data
+⮚May use aconnection -oriented protocol such asTCP toensure destination received segments
+⮚May use aconnectionless protocol such asUDP tosend segments without assurance ofdelivery
+⮚Uses port addressing Session Layer70
+⮚Responsible formanaging thedialog between networked devices
+⮚Establishes, manages, and terminates connections
+⮚Provides duplex, half-duplex, orsimplex communications between devices
+⮚Provides procedures forestablishing checkpoints, adjournment, termination, and restart orrecovery procedures Presentation Layer71
+⮚Concerned with how data ispresented tothenetwork
+⮚Handles three primary tasks :–Translation ,–Compression ,–Encryption
+•Changes data soanother type ofcomputer can
+understand it
+ Translation
+•Makes data smaller tosend more data insame amount
+oftime
+ Compression
+•Encodes data toprotect from interception oreaves
+dropping
+ Encryption Application Layer72
+⮚Contains allservices orprotocols needed byapplication software oroperating system tocommunicate onthe
+network
+⮚Examples
+✔Firefox web browser uses HTTP (Hyper -Text Transport Protocol)
+✔E-mail program may use POP 3(Post Office Protocol version 3)toread e-mails and SMTP (Simple Mail Transport
+Protocol) tosend e-mails Video –4 –TCP/IP MODEL73
+https://www.youtube.com/watch?v=R2kzspvRb5o Video –5 –TCP/IP MODEL –Reference 74
+https://www.youtube.com/watch?v=RbY8Hb6abbg b. The TCP/IP Reference Model75
+Figure 22: The TCP/IP reference model
+ The Link Layer76
+⮚The lowest layer inthemodel, thelink layer, describes what links such asserial lines and classic Ethernet must doto
+meet theneeds ofthis connectionless internet layer .
+The Internet Layer
+⮚Itsjobistopermit hosts toinject packets into any network and have them travel independently tothedestination .
+⮚The internet layer defines anofficial packet format and protocol called IP(Internet Protocol), plus acompanion
+protocol called ICMP (Internet Control Message Protocol) that helps itfunction .
+⮚The joboftheinternet layer istodeliver IPpackets where they aresupposed togo. The Transport Layer77
+⮚Two end to-end transport protocols have been defined here .The first one, TCP (Transmission Control Protocol), isa
+reliable connection -oriented protocol that allows abyte stream originating onone machine tobedelivered without
+error onany other machine intheinternet .Itsegments theincoming byte stream into discrete messages and passes
+each one ontothe internet layer .Atthe destination, the receiving TCP process reassembles the received messages
+into theoutput stream .
+⮚UDP (User Datagram Protocol), isanunreliable, connectionless protocol forapplications that donot wantTCP’s
+sequencing orflow control and wish toprovide their own (ifany) .Itisalso widely used forone-shot, client -server -
+type request -reply queries and applications inwhich prompt delivery ismore important than accurate delivery,
+such astransmitting speech orvideo . The Application Layer78
+⮚Application layer include any session and presentation functions that they require .
+⮚Itcontains allthehigher -level protocols .The early ones included virtual terminal (TELNET), filetrans fer(FTP), and
+electronic mail (SMTP) .Many other protocols have been added tothese over theyears .
+Figure 23: The TCP/IP model with some protocols Summary79
+ Differences80
+OSI Model TCP/ IP Model
+Contains 7 layers. Contains 4 layers.
+Uses Strict layering resulting in vertical layers. Uses Loose layering resulting in Horizontal layers.
+Supports both connectionless and connection -oriented 
+communication in Network layer, but only connection -
+oriented communication in transport layer.Supports only connectionless communication in 
+Network layer, but both connection -oriented and 
+connectionless communication in transport layer.
+It distinguishes between Service, Interface and 
+Protocol.Does not clearly distinguishes between Service, 
+Interface and Protocol.
+It does not support internet working. It supports internet working.
+Considered more reliable. Considered a reference model. Video –6 -Encapsulation81
+ Video –7 -Encapsulation82
+ 7. Standardization 83
+⮚The Internet, with its roots primarily in the research domain.
+⮚Various groups that coordinate Internet issues have guided this growth and development.
+Figure 24: Internet Administration Internet Society (ISOC)84
+⮚ISOC isaninternational, nonprofit organization formed in1992 to provide support forthe Internet standards
+process .
+⮚ISOC accomplishes this through maintaining and supporting other Internet administrative bodies such asIAB,IETF,
+IRTF, and IANA .
+⮚Also promotes research and other scholarly activities relating totheInternet . Internet Architecture Board (IAB)85
+⮚The IAB isthetechnical advisor totheISOC .
+⮚Purposes :
+✔oversee thecontinuing development oftheTCP/IP Protocol Suite .
+✔serve inatechnical advisory capacity toresearch members oftheInternet community .
+⮚IAB accomplishes this through its two primary components:  
+1.Internet Engineering Task Force (IETF)
+2.Internet Research Task Force (IRTF).
+⮚Another responsibility of the IAB is the editorial management of the RFCs. Internet Engineering Task Force(IETF )86
+⮚Forum ofworking groups managed bytheInternet Engineering Steering Group (IESG) .
+⮚Responsible foridentifying operational problems and proposing solutions tothese problems .
+⮚Also develops and reviews specifications intended asInternet standards .
+⮚Forum ofworking groups managed bySteering Group (IRSG) .
+⮚Itfocus onlong -term research topics related toInternet protocols, applications, architecture and technology .Internet Research Task Force (IRTF ) W3C87
+⮚For Web standards, theWorld Wide Web Consortium (W3C)develops protocols and guidelines tofacilitate thelong -
+term growth oftheWeb .
+⮚W3Cnow has almost 500 companies, universities, and other organizations asmembers and has produced well over
+100 W3CRecommendations, asitsstandards arecalled, covering topics such asHTML and Web privacy . END OF MODULE 188
