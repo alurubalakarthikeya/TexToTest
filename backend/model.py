@@ -25,8 +25,8 @@ try:
     improved_distractor_gen = create_improved_distractor_generator()
     USE_IMPROVED_DISTRACTORS = True
     print("✓ Improved distractor generator loaded successfully")
-except ImportError:
-    print("Improved distractors not available. Using basic distractor generator.")
+except Exception as e:
+    print(f"Improved distractors not available: {e}. Using basic distractor generator.")
     improved_distractor_gen = None
     USE_IMPROVED_DISTRACTORS = False
 
@@ -34,7 +34,8 @@ try:
     from enhanced_distractors import create_enhanced_distractor_generator
     enhanced_distractor_gen = create_enhanced_distractor_generator()
     USE_ENHANCED_DISTRACTORS = True
-except ImportError:
+except Exception as e:
+    print(f"Enhanced distractors not available: {e}")
     enhanced_distractor_gen = None
     USE_ENHANCED_DISTRACTORS = False
 

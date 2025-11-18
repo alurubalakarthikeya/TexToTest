@@ -16,6 +16,17 @@ try:
 except ImportError:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
     print("Warning: sentence-transformers not installed. Falling back to pattern-based distractors only.")
+    # Create dummy classes for compatibility
+    class SentenceTransformer:
+        def __init__(self, *args, **kwargs):
+            pass
+        def encode(self, *args, **kwargs):
+            return []
+    
+    class util:
+        @staticmethod
+        def pytorch_cos_sim(*args, **kwargs):
+            return []
 
 @dataclass
 class DistractorCandidate:
