@@ -6,7 +6,7 @@ import Navbar from "./Components/NavBar.jsx";
 const API_BASE = (
   import.meta?.env?.VITE_API_BASE ||
   (typeof window !== 'undefined' && window.__API_BASE__) ||
-  "http://localhost:8000"
+  "https://textotest.onrender.com"
 ).replace(/\/$/, "");
 
 export default function App() {
