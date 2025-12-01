@@ -33,14 +33,11 @@ html, body, #root {
     linear-gradient(
       180deg,
       #125084ff 0%,
-      #125084ff 16%,
-      rgba(18, 80, 132, 0.85) 18%,
-      rgba(18, 80, 132, 0.35) 22%,
-      rgba(18, 80, 132, 0) 26%
-    ),
-    /* Layer 2: original animated gradient */
-    linear-gradient(135deg, #125084ff , rgb(17, 78, 127), #34629a, #427f9084);
-  /* Keep the top overlay static; animate only the second layer */
+      rgba(18, 80, 132, 0.95) 25%,
+      rgba(18, 80, 132, 0.85) 50%,
+      rgba(18, 81, 132, 0.653) 75%,
+      rgba(18, 81, 132, 0.614) 100%
+    );
   background-repeat: no-repeat, no-repeat;
   background-size: auto, 400% 400%;
   background-position: top left, 0% 50%;
