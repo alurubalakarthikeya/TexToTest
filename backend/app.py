@@ -137,7 +137,7 @@ async def serve_test_frontend():
         return HTMLResponse(content="""
         <!DOCTYPE html>
         <html><head><title>TexToTest API</title></head><body>
-        <h1>🚀 TexToTest Enhanced API</h1>
+        <h1>TexToTest Enhanced API</h1>
         <p>All 8 enhancement features are ready!</p>
         <p>Test frontend not found. API is available at <a href="/">/</a></p>
         <p>Try uploading via <strong>POST /upload</strong> and generating questions via <strong>POST /ask-model</strong></p>
@@ -281,11 +281,6 @@ async def get_question_config():
         "question_types": [
             {"value": "multiple_choice", "label": "Multiple Choice", "description": "Traditional MCQ with 4 options"},
             {"value": "true_false", "label": "True/False", "description": "Binary true or false questions"},
-            {"value": "fill_in_blank", "label": "Fill in the Blank", "description": "Complete the missing word or phrase"},
-            {"value": "short_answer", "label": "Short Answer", "description": "Brief explanatory answers"},
-            {"value": "matching", "label": "Matching", "description": "Match items from two columns"},
-            {"value": "mixed", "label": "Mixed Types", "description": "Combination of different question types"},
-            {"value": "simple", "label": "Simple Questions", "description": "Basic text-based questions"}
         ],
         "difficulties": [
             {"value": "easy", "label": "Easy", "description": "Basic recall and understanding"},

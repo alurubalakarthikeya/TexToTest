@@ -3,7 +3,6 @@ import random
 from typing import List, Dict, Set, Tuple
 from collections import defaultdict, Counter
 
-# Try to import NLTK components with fallbacks
 try:
     import nltk
     from nltk.corpus import wordnet
@@ -19,7 +18,6 @@ except ImportError:
 
 class ImprovedDistractorGenerator:
     def __init__(self):
-        # Download required NLTK data if available
         if NLTK_AVAILABLE:
             try:
                 import nltk
@@ -38,7 +36,6 @@ class ImprovedDistractorGenerator:
             print("Using basic text processing (NLTK not available)")
             self.lemmatizer = None
         
-        # Define semantic categories with domain-specific terms
         self.semantic_categories = {
             'networking': {
                 'concepts': ['protocol', 'packet', 'router', 'switch', 'hub', 'gateway', 'firewall', 'bandwidth', 'latency', 'throughput', 'topology', 'ethernet', 'wifi', 'bluetooth'],
@@ -65,8 +62,6 @@ class ImprovedDistractorGenerator:
                 'properties': ['scalable', 'reliable', 'secure', 'efficient', 'robust', 'flexible', 'maintainable']
             }
         }
-        
-        # Common distractor patterns for different answer types
         self.distractor_patterns = {
             'definition': {
                 'prefixes': ['A type of', 'A method of', 'A process of', 'A system for', 'A technique for'],

@@ -47,8 +47,14 @@ class EnhancedDistractorGenerator:
         global SENTENCE_TRANSFORMERS_AVAILABLE
         if SENTENCE_TRANSFORMERS_AVAILABLE:
             try:
-                self.model = SentenceTransformer(model_name)
-                print(f"Loaded semantic model: {model_name}")
+                # Skip model loading for faster startup - use pattern-based only
+                print("Enhanced distractors: Using pattern-based mode only (no model download)")
+                SENTENCE_TRANSFORMERS_AVAILABLE = False
+                self.model = None
+            except Exception as e:
+                print(f"Could not load semantic model ({e}). Using pattern-based distractors only.")
+                SENTENCE_TRANSFORMERS_AVAILABLE = False
+                self.model = None
             except Exception as e:
                 print(f"Failed to load semantic model: {e}")
                 SENTENCE_TRANSFORMERS_AVAILABLE = False

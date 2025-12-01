@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import "./App.css";
 import Navbar from "./Components/NavBar.jsx";
 
-// API base dynamic: Vite env or window override or fallback to local
+// API base dynamic: Vite env or window override or fallback to production
 const API_BASE = (
   import.meta?.env?.VITE_API_BASE ||
   (typeof window !== 'undefined' && window.__API_BASE__) ||
@@ -390,8 +390,7 @@ export default function App() {
                   <button
                     className="export-btn"
                     onClick={() => setShowExportMenu(!showExportMenu)}
-                  >
-                    📥 Export Quiz
+                  >Export Quiz
                   </button>
                   
                   {showExportMenu && (
@@ -551,7 +550,7 @@ export default function App() {
                     <div className="question-footer">
                       <div className="question-info">
                         {question.category && (
-                          <span className="category">📚 {question.category}</span>
+                          <span className="category"> {question.category}</span>
                         )}
                         <span className="points">⭐ {question.points || 1} pt(s)</span>
                       </div>
@@ -597,7 +596,7 @@ export default function App() {
               <p className="quiz-instruction">
                 {questions.length > 0 
                   ? `${questions.length} questions ready! Click to expand and view.`
-                  : "Upload a PDF and click 'Generate Quiz' to see questions here."
+                  : " Upload the pdf to get quiz questions here."
                 }
               </p>
             </div>
