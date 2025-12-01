@@ -316,51 +316,6 @@ export default function App() {
             </label>
           </div>
 
-          {/* Question Configuration */}
-          <div className="question-config">
-            <div className="config-row">
-              <div className="config-item">
-                <label htmlFor="questionType">Question Type:</label>
-                <select 
-                  id="questionType" 
-                  value={questionType} 
-                  onChange={(e) => setQuestionType(e.target.value)}
-                  className="config-select"
-                >
-                  <option value="multiple_choice">Multiple Choice</option>
-                </select>
-              </div>
-
-              <div className="config-item">
-                <label htmlFor="difficulty">Difficulty:</label>
-                <select 
-                  id="difficulty" 
-                  value={difficulty} 
-                  onChange={(e) => setDifficulty(e.target.value)}
-                  className="config-select"
-                >
-                  <option value="">Any</option>
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
-                </select>
-              </div>
-
-              <div className="config-item">
-                <label htmlFor="numQuestions">Questions:</label>
-                <input 
-                  type="number" 
-                  id="numQuestions"
-                  min="5" 
-                  max="50" 
-                  value={numQuestions} 
-                  onChange={(e) => setNumQuestions(parseInt(e.target.value) || 25)}
-                  className="config-input"
-                />
-              </div>
-            </div>
-          </div>
-
           <button className="btn" onClick={handleGenerateClick} disabled={!canGenerate || isLoading}>
             {isLoading ? "Generating..." : (!canGenerate ? "Upload a file first" : "Generate Quiz")}
           </button>
@@ -443,7 +398,7 @@ export default function App() {
                 <div className="loading-container">
                   <div className="loading-spinner"></div>
                   <h3>Generating Questions...</h3>
-                  <p>Using OpenRouter Mistral AI to create multiple-choice questions with distractors</p>
+                  <p>Please wait for your quiz.</p>
                 </div>
               ) : questions.length > 0 ? (
                 questions.map((question, idx) => (
